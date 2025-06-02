@@ -1,0 +1,22 @@
+{% extends "admin/base_site.html" %}
+{% load i18n %}
+
+{% block content %}
+<div class="content-main">
+    <h1>Upload Images for {{ property }}</h1>
+    <form method="post" enctype="multipart/form-data" class="form-horizontal">
+        {% csrf_token %}
+        <div class="form-row">
+            {{ form.images.label_tag }}
+            {{ form.images }}
+            {{ form.images.errors }}
+        </div>
+        <div class="submit-row">
+            <input type="submit" value="{% trans 'Upload Images' %}" class="default">
+            <a href="{% url opts|admin_urlname:'change' property.id|admin_urlquote %}" class="button">
+                {% trans 'Back to property' %}
+            </a>
+        </div>
+    </form>
+</div>
+{% endblock %}

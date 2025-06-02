@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blog Post Detail</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Georgia', 'Times New Roman', serif;
+            line-height: 1.8;
+            color: #2d3748;
+            background: #fdfffe;
+            overflow-x: hidden;
+        }
+
+        /* Reading progress bar */
+        .progress-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 0%;
+            height: 3px;
+            background: linear-gradient(90deg, #10b981, #34d399);
+            z-index: 1000;
+            transition: width 0.3s ease;
+        }
+
+        .container {
+            max-width: 700px;
+            margin: 0 auto;
+            padding: 0 24px;
+            position: relative;
+        }
+
+        /* Hero section */
+        .blog-hero {
+            padding: 0;
+            text-align: center;
+            position: relative;
+            margin: 0 -24px 60px;
+            border-radius: 0 0 20px 20px;
+            overflow: hidden;
+            min-height: 60vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .hero-background {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, #f0fdf4 0%, #ecfdf5 100%);
+            z-index: 1;
+        }
+
+        .hero-image {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            z-index: 2;
+        }
+
+        .hero-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            opacity: 0.7;
+        }
+
+        .hero-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(
+                135deg,
+                rgba(16, 185, 129, 0.8) 0%,
+                rgba(5, 150, 105, 0.9) 50%,
+                rgba(4, 120, 87, 0.85) 100%
+            );
+            z-index: 3;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 4;
+            padding: 80px 24px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            font-size: clamp(2.2rem, 5vw, 3.5rem);
+            font-weight: 700;
+            color: #ffffff;
+            margin-bottom: 24px;
+            letter-spacing: -0.02em;
+            line-height: 1.2;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+            position: relative;
+            z-index: 1;
+        }
+
+        .meta {
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 0.95rem;
+            font-weight: 500;
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            background: rgba(255, 255, 255, 0.15);
+            padding: 10px 24px;
+            border-radius: 30px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(15px);
+            position: relative;
+            z-index: 1;
+        }
+
+        .meta::before {
+            content: '✍️';
+            font-size: 1rem;
+        }
+
+        /* Featured image - now removed since it's in hero */
+        .featured-image {
+            display: none;
+        }
+
+        /* Content sections */
+        .content-section {
+            margin-bottom: 50px;
+            position: relative;
+            animation: fadeInUp 0.6s ease-out;
+            animation-fill-mode: both;
+        }
+
+        .content-section:nth-child(even) {
+            animation-delay: 0.1s;
+        }
+
+        h2 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #047857;
+            margin-bottom: 20px;
+            position: relative;
+            padding-left: 20px;
+        }
+
+        h2::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 4px;
+            height: 20px;
+            background: linear-gradient(180deg, #10b981, #34d399);
+            border-radius: 2px;
+        }
+
+        .section-content {
+            position: relative;
+        }
+
+        .section-content p {
+            font-size: 1.1rem;
+            color: #374151;
+            margin-bottom: 1.6em;
+            text-align: justify;
+            hyphens: auto;
+        }
+
+        .section-content p:first-letter {
+            font-size: 1.3em;
+            font-weight: 600;
+            color: #065f46;
+        }
+
+        /* Section images - much smaller and inline */
+        .section-image {
+            margin: 30px 0;
+            text-align: center;
+        }
+
+        .section-image img {
+            width: 100%;
+            max-width: 350px;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(16, 185, 129, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .section-image img:hover {
+            transform: scale(1.02);
+            box-shadow: 0 6px 20px rgba(16, 185, 129, 0.15);
+        }
+
+        /* Divider between sections */
+        .divider {
+            margin: 40px 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, #d1fae5, transparent);
+            border: none;
+            position: relative;
+        }
+
+        .divider::after {
+            content: '❈';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: #fdfffe;
+            color: #10b981;
+            padding: 0 15px;
+            font-size: 1.2rem;
+        }
+
+        /* Quote styling for engagement */
+        .quote-highlight {
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.05), rgba(52, 211, 153, 0.05));
+            border-left: 4px solid #10b981;
+            padding: 20px 24px;
+            margin: 30px 0;
+            border-radius: 0 8px 8px 0;
+            font-style: italic;
+            position: relative;
+        }
+
+        .quote-highlight::before {
+            content: '"';
+            font-size: 3rem;
+            color: #10b981;
+            position: absolute;
+            top: -10px;
+            left: 20px;
+            opacity: 0.3;
+            font-family: Georgia, serif;
+        }
+
+        /* Back to blog button */
+        .back-to-blog {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            padding: 12px 20px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);
+            transition: all 0.3s ease;
+            z-index: 1000;
+            backdrop-filter: blur(10px);
+        }
+
+        .back-to-blog:hover {
+            background: linear-gradient(135deg, #059669, #047857);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(16, 185, 129, 0.4);
+            color: white;
+        }
+
+        .back-to-blog::before {
+            content: '←';
+            font-size: 1.1rem;
+            transition: transform 0.3s ease;
+        }
+
+        .back-to-blog:hover::before {
+            transform: translateX(-3px);
+        }
+
+        /* Floating reading indicator */
+        .reading-indicator {
+            position: fixed;
+            top: 50%;
+            left: 20px;
+            transform: translateY(-50%);
+            background: rgba(16, 185, 129, 0.1);
+            border-radius: 20px;
+            padding: 15px 8px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(16, 185, 129, 0.2);
+            z-index: 100;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .reading-indicator.visible {
+            opacity: 1;
+        }
+
+        .reading-indicator::before {
+            content: '📖';
+            font-size: 1.5rem;
+            display: block;
+            text-align: center;
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Mobile responsiveness */
+        @media (max-width: 768px) {
+            .container {
+                padding: 0 16px;
+            }
+
+            .blog-hero {
+                margin: 0 -16px 40px;
+                min-height: 50vh;
+            }
+
+            .hero-content {
+                padding: 60px 16px;
+            }
+
+            h1 {
+                font-size: 2rem;
+            }
+
+            h2 {
+                font-size: 1.3rem;
+            }
+
+            .section-content p {
+                font-size: 1rem;
+                text-align: left;
+            }
+
+            .section-image img {
+                max-width: 300px;
+                height: 160px;
+            }
+
+            .back-to-blog {
+                bottom: 20px;
+                right: 20px;
+                padding: 10px 16px;
+                font-size: 0.85rem;
+            }
+
+            .reading-indicator {
+                left: 10px;
+                padding: 10px 6px;
+            }
+
+            .reading-indicator::before {
+                font-size: 1.2rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .meta {
+                padding: 6px 16px;
+                font-size: 0.9rem;
+            }
+
+            .quote-highlight {
+                padding: 16px 20px;
+                margin: 20px 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Reading progress bar -->
+    <div class="progress-bar" id="progressBar"></div>
+
+    <!-- Reading indicator -->
+    <div class="reading-indicator" id="readingIndicator"></div>
+
+    <!-- Floating Back to Blog Button -->
+    <a href="{% url 'blog:blog_list' %}" class="back-to-blog">
+        Back to Blog
+    </a>
+
+    <div class="container">
+        <!-- Hero Section -->
+        <header class="blog-hero">
+            <!-- Background fallback -->
+            <div class="hero-background"></div>
+
+            <!-- Hero image if available -->
+            {% if post.image %}
+            <div class="hero-image">
+                <img src="{{ post.image.url }}" alt="{{ post.title }}">
+            </div>
+            <div class="hero-overlay"></div>
+            {% endif %}
+
+            <div class="hero-content">
+                <h1>{{ post.title }}</h1>
+                <div class="meta">
+                    <span>{{ post.author }}</span>
+                    <span>•</span>
+                    <span>{{ post.created_at|date:"M d, Y" }}</span>
+                </div>
+            </div>
+        </header>
+
+        <!-- Content Sections -->
+        {% for section in sections %}
+        <article class="content-section">
+            <h2>{{ section.subtitle }}</h2>
+            <div class="section-content">
+                <p>{{ section.description|linebreaks }}</p>
+                {% if section.image %}
+                <div class="section-image">
+                    <img src="{{ section.image.url }}" alt="{{ section.subtitle }}">
+                </div>
+                {% endif %}
+            </div>
+            {% if not forloop.last %}
+            <hr class="divider">
+            {% endif %}
+        </article>
+        {% endfor %}
+    </div>
+
+    <script>
+        // Reading progress bar
+        window.addEventListener('scroll', () => {
+            const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+            const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+            const scrolled = (winScroll / height) * 100;
+            document.getElementById('progressBar').style.width = scrolled + '%';
+        });
+
+        // Reading indicator
+        const readingIndicator = document.getElementById('readingIndicator');
+        let scrollTimeout;
+
+        window.addEventListener('scroll', () => {
+            readingIndicator.classList.add('visible');
+
+            clearTimeout(scrollTimeout);
+            scrollTimeout = setTimeout(() => {
+                readingIndicator.classList.remove('visible');
+            }, 1500);
+        });
+
+        // Smooth scroll animation for content sections
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.animationPlayState = 'running';
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.content-section').forEach(section => {
+            observer.observe(section);
+        });
+    </script>
+</body>
+</html>

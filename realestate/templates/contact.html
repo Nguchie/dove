@@ -1,0 +1,537 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Us - Dove Real Estate</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Cormorant Garamond', serif;
+            background-color: #f9f7f4;
+            color: #333;
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        @font-face {
+            font-family: 'Cormorant Garamond';
+            src: url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&display=swap');
+        }
+
+        .header {
+            background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)),
+                        url('https://images.unsplash.com/photo-1560520031-3a4dc4e9de0c?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');
+            background-size: cover;
+            background-position: center;
+            color: white;
+            margin-top: -80px;
+            padding: 8rem 0 6rem;
+            position: relative;
+            box-shadow: 0 5px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+
+            position: relative;
+            z-index: 2;
+            text-align: center;
+        }
+
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .tagline {
+            font-size: 1.6rem;
+            opacity: 0.9;
+            font-style: italic;
+            font-weight: 300;
+            animation: fadeIn 1.5s ease-out 0.5s both;
+            text-shadow: 1px 1px 4px rgba(0,0,0,0.3);
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: -4rem auto 0;
+            padding: 0 2rem 4rem;
+            position: relative;
+            z-index: 3;
+        }
+
+        .contact-wrapper {
+            display: flex;
+            background: white;
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .contact-image {
+            flex: 1;
+            background: url('https://images.unsplash.com/photo-1512917774080-9991f1c4c750?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');
+            background-size: cover;
+            background-position: center;
+            position: relative;
+
+            min-height: 500px;
+            display: none;
+        }
+
+        @media (min-width: 992px) {
+            .contact-image {
+                display: block;
+            }
+        }
+
+        .contact-image::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(45, 90, 74, 0.7) 0%, rgba(26, 61, 46, 0.5) 100%);
+        }
+
+        .contact-image-content {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            padding: 2rem;
+            color: white;
+            z-index: 2;
+            width: 100%;
+        }
+
+        .contact-image-content h3 {
+            font-size: 1.8rem;
+            margin-bottom: 1rem;
+            font-weight: 600;
+        }
+
+        .contact-image-content p {
+            font-size: 1.1rem;
+            line-height: 1.6;
+            opacity: 0.9;
+        }
+
+        .contact-form-container {
+            flex: 1;
+            padding: 3rem;
+            position: relative;
+        }
+.required {
+    color: red;
+    margin-left: 0.2rem;
+}
+
+        .page-title {
+            font-size: 2.5rem;
+            color: #2d5a4a;
+            margin-bottom: 1.5rem;
+            font-weight: 600;
+            position: relative;
+            padding-bottom: 1rem;
+        }
+
+        .page-title::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 60px;
+            height: 3px;
+            background: #2d5a4a;
+        }
+
+        .page-subtitle {
+            font-size: 1.2rem;
+            color: #777;
+            margin-bottom: 2.5rem;
+            font-style: italic;
+        }
+
+        .form-group {
+            margin-bottom: 2rem;
+            position: relative;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.8rem;
+            color: #555;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 1rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 1rem;
+            font-family: 'Cormorant Garamond', serif;
+            transition: all 0.3s ease;
+            background-color: #f9f9f9;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: #2d5a4a;
+            box-shadow: 0 0 0 2px rgba(45, 90, 74, 0.2);
+            background-color: white;
+        }
+
+        textarea.form-control {
+            min-height: 150px;
+            resize: vertical;
+        }
+
+        select.form-control {
+            appearance: none;
+            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%232d5a4a'%3e%3cpath d='M7 10l5 5 5-5z'/%3e%3c/svg%3e");
+            background-repeat: no-repeat;
+            background-position: right 1rem center;
+            background-size: 1.5rem;
+        }
+
+        .submit-btn {
+            display: inline-block;
+            padding: 1rem 2.5rem;
+            background: #2d5a4a;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-size: 1.1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            font-family: 'Cormorant Garamond', serif;
+        }
+
+        .submit-btn:hover {
+            background: #1a3d2e;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .submit-btn:active {
+            transform: translateY(0);
+        }
+
+        .contact-info {
+            margin-top: 3rem;
+            padding-top: 2rem;
+            border-top: 1px solid #eee;
+        }
+
+        .contact-info-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .contact-info-icon {
+            width: 50px;
+            height: 50px;
+            background: #f0f7f5;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 1.5rem;
+            color: #2d5a4a;
+            font-size: 1.2rem;
+        }
+
+        .contact-info-content h4 {
+            font-size: 1.2rem;
+            color: #2d5a4a;
+            margin-bottom: 0.3rem;
+            font-weight: 600;
+        }
+
+        .contact-info-content p,
+        .contact-info-content a {
+            color: #777;
+            font-size: 1.1rem;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .contact-info-content a:hover {
+            color: #2d5a4a;
+        }
+
+        .social-links {
+            display: flex;
+            margin-top: 2rem;
+        }
+
+        .social-link {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: #f0f7f5;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 1rem;
+            color: #2d5a4a;
+            transition: all 0.3s ease;
+        }
+
+        .social-link:hover {
+            background: #2d5a4a;
+            color: white;
+            transform: translateY(-3px);
+        }
+
+        @media (max-width: 768px) {
+            .header {
+                padding: 6rem 0 4rem;
+            }
+
+            .logo {
+                font-size: 2.5rem;
+            }
+
+            .tagline {
+                font-size: 1.3rem;
+            }
+
+            .contact-form-container {
+                padding: 2rem;
+            }
+
+            .page-title {
+                font-size: 2rem;
+            }
+        }
+
+        /* Luxury details */
+        .luxury-divider {
+            height: 1px;
+            background: linear-gradient(to right, transparent, #ddd, transparent);
+            margin: 2rem 0;
+        }
+
+        .watermark {
+            position: absolute;
+            bottom: 2rem;
+            right: 2rem;
+            opacity: 0.1;
+            font-size: 8rem;
+            font-weight: 700;
+            color: #2d5a4a;
+            z-index: -1;
+            user-select: none;
+        }
+
+.spinner {
+    display: inline-block;
+    width: 1rem;
+    height: 1rem;
+    border: 2px solid rgba(255,255,255,0.3);
+    border-radius: 50%;
+    border-top-color: white;
+    animation: spin 1s ease-in-out infinite;
+    margin-right: 5px;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+.submit-btn.success {
+    background-color: #4CAF50 !important;
+}
+
+.submit-btn.error {
+    background-color: #dc3545 !important;
+}
+    </style>
+</head>
+<body>
+ <header class="header" style="background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url('https://images.unsplash.com/photo-1600585154340-be6161a56a0c?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80'); background-size: cover; background-position: center;">
+    <div class="header-content">
+        <h1 class="logo">Dove Real Estate</h1>
+        <p class="tagline">Exquisite Properties for Discerning Clients</p>
+    </div>
+</header>
+
+    <main class="container">
+        <div class="contact-wrapper">
+            <div class="contact-image">
+                <div class="contact-image-content">
+                    <h3>Our Commitment to Excellence</h3>
+                    <p>At Dove Real Estate, we understand that luxury is in the details. Our team of dedicated professionals is ready to provide personalized service to meet your unique real estate needs.</p>
+                </div>
+            </div>
+
+            <div class="contact-form-container">
+                <div class="watermark">Dove</div>
+
+                <h1 class="page-title">Contact Our Team</h1>
+                <p class="page-subtitle">Complete the form below and a luxury property specialist will contact you within 24 hours</p>
+
+                <form class="contact-form" id="contactForm" action="{% url 'contact_form_submit' %}" method="POST">
+    {% csrf_token %}
+    <div class="form-group">
+        <label for="fullName">Full Name <span class="required">*</span></label>
+        <input name="name" type="text" id="fullName" class="form-control" placeholder="John Smith" required>
+    </div>
+
+    <div class="form-group">
+        <label for="email">Email Address <span class="required">*</span></label>
+        <input name="email" type="email" id="email" class="form-control" placeholder="john@example.com" required>
+    </div>
+
+    <div class="form-group">
+        <label for="phone">Phone Number <span class="required">*</span></label>
+        <input name="phone" type="tel" id="phone" class="form-control" placeholder="+254 7000000" required>
+    </div>
+
+    <div class="form-group">
+        <label for="inquiryType">Service Interest <span class="required">*</span></label>
+        <select name="inquiryType" id="inquiryType" class="form-control" required>
+            <option value="" disabled selected>Select an option</option>
+            <option value="buy">Buy a Luxury Home</option>
+            <option value="sell">Sell My Property</option>
+        </select>
+    </div>
+
+    <div class="form-group">
+        <label for="description">Your Message <span class="required">*</span></label>
+        <textarea name="description" id="description" class="form-control" placeholder="Tell us about your real estate needs..." required></textarea>
+    </div>
+
+    <button type="submit" class="submit-btn">Submit Inquiry</button>
+</form>
+
+
+                <div class="luxury-divider"></div>
+
+                <div class="contact-info">
+                    <div class="contact-info-item">
+                        <div class="contact-info-icon">
+                            <i class="fas fa-phone-alt"></i>
+                        </div>
+                        <div class="contact-info-content">
+                            <h4>Phone</h4>
+                            <a href="tel:+254 721 591111">+254 721 591111</a>
+                        </div>
+                    </div>
+
+                    <div class="contact-info-item">
+                        <div class="contact-info-icon">
+                            <i class="fas fa-envelope"></i>
+                        </div>
+                        <div class="contact-info-content">
+                            <h4>Email</h4>
+                            <a href="mailto:info@doverealestateltd.com">info@doverealestate.com</a>
+                        </div>
+                    </div>
+
+                    <div class="contact-info-item">
+                        <div class="contact-info-icon">
+                            <i class="fas fa-map-marker-alt"></i>
+                        </div>
+                        <div class="contact-info-content">
+                            <h4>Headquarters</h4>
+                            <p> Allamano Center, (Next to Consolota Primary), 5th Floor, Suite 5A Westlands, Nairobi<br>Kenya, KE 00100</p>
+                        </div>
+                    </div>
+
+
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+    <script>
+contactForm.addEventListener('submit', async function (e) {
+    e.preventDefault();
+    console.log("Form submission started");
+
+    const submitBtn = e.target.querySelector('button[type="submit"]');
+    submitBtn.disabled = true;
+    submitBtn.innerHTML = '<span class="spinner"></span> Sending...';
+
+    try {
+        const formData = new URLSearchParams();
+        for (const pair of new FormData(contactForm)) {
+            formData.append(pair[0], pair[1]);
+        }
+
+        const response = await fetch(contactForm.action, {
+            method: 'POST',
+            body: formData,
+            headers: {
+                'X-Requested-With': 'XMLHttpRequest',
+                'Content-Type': 'application/x-www-form-urlencoded',
+            }
+        });
+
+        const data = await response.json();
+        console.log("Server response:", data);
+
+        if (!response.ok || data.status !== 'success') {
+            throw new Error(data.message || 'Submission failed');
+        }
+
+        submitBtn.innerHTML = '✓ Message Sent';
+        submitBtn.classList.add('success');
+        contactForm.reset();
+
+    } catch (error) {
+        console.error('Error:', error);
+        submitBtn.innerHTML = '✗ Error - Try Again';
+        submitBtn.classList.add('error');
+        alert('Error: ' + error.message);
+    } finally {
+        setTimeout(() => {
+            submitBtn.innerHTML = 'Submit Inquiry';
+            submitBtn.classList.remove('success', 'error');
+            submitBtn.disabled = false;
+        }, 3000);
+    }
+});
+
+document.addEventListener('DOMContentLoaded', function() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const property = urlParams.get('property');
+    const location = urlParams.get('location');
+
+    if (property && location) {
+        const descriptionField = document.getElementById('description');
+        if (descriptionField) {
+            descriptionField.value = `I would like to inquire about ${property}, located in ${location}. Is it still available?`;
+        }
+    }
+});
+
+    </script>
+</body>
+</html>
+{% endblock %}
+
+

@@ -1,0 +1,12 @@
+{% extends "admin/change_form.html" %}
+{% load i18n admin_urls %}
+
+{% block object-tools-items %}
+    {{ block.super }}
+    <li>
+        <a href="{% url opts|admin_urlname:'upload_images' original.pk|admin_urlquote %}"
+           class="historylink">
+            {% trans "Bulk Upload Images" %}
+        </a>
+    </li>
+{% endblock %}

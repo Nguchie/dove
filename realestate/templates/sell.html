@@ -1,0 +1,531 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sell Your Property | Dove Real Estate</title>
+    <style>
+        :root {
+            --primary-green: #2E8B57;
+            --light-green: #4CAF50;
+            --white: #FFFFFF;
+            --light-gray: #F5F5F5;
+            --dark-gray: #333333;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        body {
+            background-color: var(--white);
+            color: var(--dark-gray);
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Hero Section with Background Image - Now comes first */
+        .hero {
+            position: relative;
+            height: 70vh;
+            min-height: 500px;
+            width: 100%;
+
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            text-align: center;
+            margin-top: -90px; /* Removed the top margin since it's now first */
+        }
+
+        .hero-overlay {
+            position: relative;
+            z-index: 2;
+            padding: 2rem;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.4);
+            z-index: 1;
+        }
+
+        .hero h2 {
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.3);
+            font-family: 'Playfair Display', serif;
+            color: var(--white);
+        }
+
+        .hero p {
+            font-size: 1.5rem;
+            margin-bottom: 2rem;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Header Styles - Now comes after hero */
+        .page-header {
+            background-color: var(--white);
+            padding: 30px 0;
+            text-align: center;
+            border-bottom: 1px solid rgba(0,0,0,0.1);
+        }
+
+        .page-header h1 {
+            color: var(--primary-green);
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+        }
+
+        /* White background section */
+        .white-bg-section {
+            background-color: var(--white);
+            padding: 60px 0;
+            color: var(--dark-gray);
+        }
+
+        /* Why Choose Us Section */
+        .benefits {
+            padding: 60px 0;
+            background-color: var(--light-gray);
+        }
+
+        .benefits-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+            margin-top: 40px;
+        }
+
+        .benefit-card {
+            background-color: var(--white);
+            padding: 25px;
+            border-radius: 5px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            text-align: center;
+            transition: transform 0.3s;
+        }
+
+        .benefit-card:hover {
+            transform: translateY(-10px);
+        }
+
+        .benefit-icon {
+            font-size: 2.5rem;
+            color: var(--primary-green);
+            margin-bottom: 15px;
+        }
+
+
+    .process {
+        padding: 80px 0;
+        background-color: #f9f9f9;
+    }
+
+    .process h2 {
+        color: var(--dark-green);
+        font-size: 2.5rem;
+        margin-bottom: 50px;
+        text-align: center;
+        position: relative;
+    }
+
+    .process h2:after {
+        content: '';
+        display: block;
+        width: 80px;
+        height: 4px;
+        background: var(--dark-green);
+        margin: 15px auto 0;
+    }
+
+    .process-steps {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        gap: 25px;
+    }
+
+    .step {
+        flex: 0 0 calc(25% - 20px);
+        background: white;
+        border-radius: 8px;
+        overflow: hidden;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        transition: transform 0.3s ease;
+        padding: 30px 20px;
+        text-align: center;
+        position: relative;
+        border-top: 4px solid var(--dark-green);
+    }
+
+    .step:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+    }
+
+    .step-number {
+        position: absolute;
+        top: 15px;
+        left: 15px;
+        background-color: var(--dark-green);
+        color: white;
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.2rem;
+        font-weight: bold;
+    }
+
+    .step-icon {
+        font-size: 3rem;
+        color: var(--dark-green);
+        margin: 15px 0;
+        height: 80px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .step h3 {
+        color: var(--dark-green);
+        font-size: 1.3rem;
+        margin-bottom: 15px;
+    }
+
+    .step p {
+        color: #666;
+        font-size: 0.95rem;
+        margin-bottom: 20px;
+        min-height: 50px;
+    }
+.read-more-btn {
+  display: inline-block;
+  padding: 10px 20px;
+  background-color: #145d36;
+  color: white;
+  text-decoration: none;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+
+    .read-more-btn:hover {
+        background-color: #134826;
+        transform: translateY(-2px);
+    }
+
+    .step-details {
+        max-height: 0;
+        overflow: hidden;
+        transition: max-height 0.5s ease;
+        text-align: left;
+    }
+
+    .step-details.active {
+        max-height: 500px;
+    }
+
+    .step-details ul {
+        list-style-type: none;
+        padding-left: 20px;
+    }
+
+    .step-details li {
+        position: relative;
+        margin-bottom: 8px;
+        font-size: 0.9rem;
+        color: var(--dark-gray);
+    }
+
+    .step-details li:before {
+        content: "•";
+        color: var(--dark-green);
+        position: absolute;
+        left: -15px;
+        font-weight: bold;
+        font-size: 1.2rem;
+    }
+
+    @media (max-width: 992px) {
+        .step {
+            flex: 0 0 calc(50% - 15px);
+            margin-bottom: 30px;
+        }
+    }
+
+    @media (max-width: 768px) {
+        .process h2 {
+            font-size: 2rem;
+        }
+
+        .step {
+            flex: 0 0 100%;
+        }
+    }
+
+    @media (max-width: 992px) {
+        .step {
+            flex: 0 0 calc(50% - 15px);
+            margin-bottom: 30px;
+        }
+    }
+
+    @media (max-width: 768px) {
+        .process h2 {
+            font-size: 2rem;
+        }
+
+        .step {
+            flex: 0 0 100%;
+        }
+
+        .step-details {
+            max-height: none;
+        }
+    }
+
+        /* Contact Sidebar */
+        .contact-sidebar {
+            position: fixed;
+            right: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            background-color: var(--primary-green);
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            z-index: 100;
+        }
+
+        .contact-option {
+            display: block;
+            background-color: var(--white);
+            color: var(--primary-green);
+            padding: 10px 15px;
+            margin-bottom: 10px;
+            border-radius: 5px;
+            text-align: center;
+            text-decoration: none;
+            font-weight: bold;
+            transition: background-color 0.3s;
+        }
+
+        .contact-option:hover {
+            background-color: var(--light-green);
+            color: var(--white);
+        }
+
+        /* CTA Section */
+        .cta {
+            background-color: var(--primary-green);
+            color: var(--white);
+            padding: 60px 0;
+            text-align: center;
+        }
+
+        .cta-button {
+            display: inline-block;
+            background-color: var(--white);
+            color: var(--primary-green);
+            padding: 15px 30px;
+            border-radius: 5px;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 1.2rem;
+            margin-top: 20px;
+            transition: all 0.3s;
+        }
+
+        .cta-button:hover {
+            background-color: var(--dark-gray);
+            color: var(--white);
+        }
+
+        /* Responsive Adjustments */
+        @media (max-width: 768px) {
+            .step {
+                flex: 0 0 calc(50% - 20px);
+            }
+
+            .contact-sidebar {
+                position: static;
+                transform: none;
+                margin: 30px auto;
+                width: 80%;
+            }
+
+            .hero {
+                height: 300px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .step {
+                flex: 0 0 100%;
+            }
+        }
+    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <!-- Hero section now comes first -->
+<section class="hero" style='background-image: url("{% static "images/sell/bg.jpeg" %}");'>
+    <div class="hero-overlay">
+        <h2>Get Top Dollar for Your Property</h2>
+        <p>Our proven strategies sell homes faster and for more money</p>
+    </div>
+</section>
+
+    <!-- Header section now comes after hero -->
+    <section class="page-header">
+        <div class="container">
+            <h1>Sell Your Property with Dove Real Estate</h1>
+            <p>Expert service, premium marketing, and maximum value for your home</p>
+        </div>
+    </section>
+
+    <section class="white-bg-section">
+        <div class="container">
+            <h2>Why Sell With Dove Real Estate?</h2>
+            <p>We combine cutting-edge marketing with personalized service to get you the best possible price for your property. Our team of experienced agents will guide you through every step of the selling process, from pricing to closing.</p>
+        </div>
+    </section>
+
+    <section class="benefits">
+        <div class="container">
+            <h2>Why Homeowners Choose Dove Real Estate</h2>
+            <div class="benefits-grid">
+                <div class="benefit-card">
+                    <div class="benefit-icon">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <h3>Maximized Value</h3>
+                    <p>Precision pricing based on local market trends and comparable sales</p>
+                </div>
+
+                <div class="benefit-card">
+                    <div class="benefit-icon">
+                        <i class="fas fa-eye"></i>
+                    </div>
+                    <h3>Premium Exposure</h3>
+                    <p>Featured on MLS, Zillow, Realtor.com, and our exclusive buyer network</p>
+                </div>
+
+                <div class="benefit-card">
+                    <div class="benefit-icon">
+                        <i class="fas fa-camera"></i>
+                    </div>
+                    <h3>Stunning Visuals</h3>
+                    <p>Professional photography, 360° virtual tours, and drone footage</p>
+                </div>
+
+                <div class="benefit-card">
+                    <div class="benefit-icon">
+                        <i class="fas fa-handshake"></i>
+                    </div>
+                    <h3>Stress-Free Process</h3>
+                    <p>Dedicated agent handles everything from showings to closing</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+<section class="process">
+    <div class="container">
+        <h2>Our Simple 4-Step Selling Process</h2>
+        <div class="process-steps">
+            <div class="step">
+                <div class="step-number">1</div>
+                <div class="step-icon">
+                    <i class="fas fa-search-dollar"></i>
+                </div>
+                <h3>Expert Valuation</h3>
+                <p>We provide a data-driven price analysis to attract serious buyers</p>
+                <a href="{% url 'blog:blog_detail' 2 %}" class="read-more-btn">Read More</a>
+
+
+            </div>
+
+            <div class="step">
+                <div class="step-number">2</div>
+                <div class="step-icon">
+                    <i class="fas fa-bullhorn"></i>
+                </div>
+                <h3>Bespoke Marketing</h3>
+                <p>High-end photography, virtual staging, and targeted advertising</p>
+                <a href="{% url 'blog:blog_detail' 3 %}" class="read-more-btn">Read More</a>
+
+
+            </div>
+
+            <div class="step">
+                <div class="step-number">3</div>
+                <div class="step-icon">
+                    <i class="fas fa-door-open"></i>
+                </div>
+                <h3>Buyer Showings</h3>
+                <p>Flexible private viewings and professionally managed open houses</p>
+                <a href="{% url 'blog:blog_detail' 4 %}" class="read-more-btn">Read More</a>
+
+
+            </div>
+
+            <div class="step">
+                <div class="step-number">4</div>
+                <div class="step-icon">
+                    <i class="fas fa-handshake"></i>
+                </div>
+                <h3>Seamless Closing</h3>
+                <p>We negotiate aggressively and streamline all paperwork for our clients</p>
+                <a href="{% url 'blog:blog_detail' 5 %}" class="read-more-btn">Read More</a>
+
+
+            </div>
+        </div>
+    </div>
+</section>
+
+
+    <section class="cta">
+        <div class="container">
+            <h2>Ready to Sell Your Property?</h2>
+            <p>Get your free, no-obligation valuation today</p>
+            <a href="{% url 'contact' %}" class="cta-button">Request Valuation</a>
+        </div>
+    </section>
+</body>
+</html>
+{% endblock %}

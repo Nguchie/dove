@@ -1,0 +1,141 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<style>
+    .property-container {
+        font-family: 'Arial', sans-serif;
+        max-width: 1000px;
+        margin: 0 auto;
+        padding: 40px 20px;
+        color: #ffff;
+    }
+
+    .property-card {
+        display: flex;
+        gap: 30px;
+        margin-bottom: 50px;
+        align-items: flex-start;
+    }
+
+    .property-image {
+        width: 300px;
+        height: 250px;
+        object-fit: cover;
+        border: 1px solid #e0e0e0;
+    }
+
+    .property-info {
+        flex: 1;
+    }
+
+    .property-title {
+        font-size: 1.3rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        margin-bottom: 15px;
+        color: #000;
+    }
+
+    .property-details {
+        margin-bottom: 20px;
+    }
+
+    .detail-row {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 8px;
+        padding-bottom: 8px;
+        border-bottom: 1px solid #f0f0f0;
+    }
+
+    .detail-label {
+        font-weight: 600;
+        font-size: 0.95rem;
+        color: #555;
+    }
+
+    .detail-value {
+        font-weight: 500;
+        color: #000;
+    }
+
+    .on-application {
+        font-weight: 600;
+        color: #2a6496;
+    }
+
+    .enquire-btn {
+        display: inline-block;
+        padding: 12px 30px;
+        background-color: #000;
+        color: #fff;
+        text-decoration: none;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        border-radius: 0;
+    }
+
+    .floorplan-link {
+        display: inline-block;
+        margin: 15px 0;
+        font-weight: 600;
+        color: #2a6496;
+        text-decoration: underline;
+        font-size: 0.95rem;
+    }
+</style>
+
+<div class="property-container">
+    {% for development in developments %}
+    <div class="property-card">
+        <!-- LEFT: Image -->
+        {% if development.images.first %}
+            <img src="{{ development.images.first.image.url }}" class="property-image" alt="{{ development.name }}">
+        {% else %}
+            <img src="{% static 'images/default-property.jpg' %}" class="property-image" alt="Development">
+        {% endif %}
+
+        <!-- RIGHT: Info -->
+        <div class="property-info">
+            <h2 class="property-title">{{ development.name|upper }}</h2>
+
+            <div class="property-details">
+                <div class="detail-row">
+                    <span class="detail-label">SIZE</span>
+                    <span class="detail-value">{{ development.beds }} Beds</span>
+                </div>
+                <div class="detail-row">
+                    <span class="detail-label">STATUS</span>
+                    <span class="detail-value">{{ development.status }}</span>
+                </div>
+                <div class="detail-row">
+                    <span class="detail-label">PRICE</span>
+                    <span class="detail-value">
+                        {% if development.price_on_application %}
+                            <span class="on-application">ON APPLICATION</span>
+                        {% else %}
+                            KSH{{ development.price|floatformat:2 }}
+                        {% endif %}
+                    </span>
+                </div>
+                <div class="detail-row">
+                    <span class="detail-label">LOCATION</span>
+                    <span class="detail-value">{{ development.location|upper }}</span>
+                </div>
+            </div>
+
+            {% if development.floorplans %}
+            <a href="{{ development.floorplans.url }}" class="floorplan-link" target="_blank">View Floorplan</a>
+            {% endif %}
+
+            <a href="#" class="enquire-btn">ENQUIRE</a>
+        </div>
+    </div>
+    {% empty %}
+    <p>No developments available at this time.</p>
+    {% endfor %}
+</div>
+{% endblock %}

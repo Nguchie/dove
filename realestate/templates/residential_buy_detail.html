@@ -1,0 +1,739 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+<div class="container-fluid px-0">
+  <!-- Hero Section with Carousel -->
+  <div class="property-hero">
+    <div id="propertyCarousel" class="carousel slide" data-bs-ride="carousel">
+      <div class="carousel-inner">
+        {% for image in property.images.all %}
+        <div class="carousel-item {% if forloop.first %}active{% endif %}">
+          <img src="{{ image.image.url }}" class="d-block w-100 property-hero-image" alt="{{ image.caption }}">
+          <div class="carousel-overlay"></div>
+        </div>
+        {% endfor %}
+      </div>
+      <button class="carousel-control-prev" type="button" data-bs-target="#propertyCarousel" data-bs-slide="prev">
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Previous</span>
+      </button>
+      <button class="carousel-control-next" type="button" data-bs-target="#propertyCarousel" data-bs-slide="next">
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Next</span>
+      </button>
+
+      <!-- Property Title Overlay -->
+      <div class="property-hero-content">
+        <div class="container">
+          <div class="row">
+            <div class="col-lg-8">
+              <h1 class="property-hero-title">{{ property.name }}</h1>
+              <div class="property-hero-location">
+                <i class="fas fa-map-marker-alt"></i> {{ property.location }}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="container mt-5">
+  <div class="row">
+    <div class="col-lg-8">
+      <!-- Property Highlights Card -->
+      <div class="property-card mb-4">
+        <div class="property-highlights-grid">
+          <div class="highlight-card">
+            <div class="highlight-icon">
+              <i class="fas fa-home"></i>
+            </div>
+            <div class="highlight-content">
+              <span class="highlight-label">Property Type</span>
+              <span class="highlight-value">{{ property.get_type_display }}</span>
+            </div>
+          </div>
+          <div class="highlight-card">
+            <div class="highlight-icon">
+              <i class="fas fa-bed"></i>
+            </div>
+            <div class="highlight-content">
+              <span class="highlight-label">Bedrooms</span>
+              <span class="highlight-value">{{ property.beds }}</span>
+            </div>
+          </div>
+          <div class="highlight-card">
+            <div class="highlight-icon">
+              <i class="fas fa-bath"></i>
+            </div>
+            <div class="highlight-content">
+              <span class="highlight-label">Bathrooms</span>
+              <span class="highlight-value">{{ property.baths }}</span>
+            </div>
+          </div>
+          <div class="highlight-card price-highlight">
+            <div class="highlight-icon">
+              <i class="fas fa-tag"></i>
+            </div>
+            <div class="highlight-content">
+              <span class="highlight-label">Price</span>
+              <span class="highlight-value">{{ property.display_price }}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Property Description -->
+      <div class="property-card mb-4">
+        <div class="section-header">
+          <h2>Property Description</h2>
+          <div class="section-divider"></div>
+        </div>
+        <div class="property-description">
+          <p>{{ property.description }}</p>
+        </div>
+      </div>
+
+      <!-- Property Details -->
+      <div class="property-card mb-4">
+        <div class="section-header">
+          <h2>Property Details</h2>
+          <div class="section-divider"></div>
+        </div>
+        <div class="details-grid">
+          <div class="detail-item">
+            <span class="detail-label">Furnishing</span>
+            <span class="detail-value">{{ property.get_furnishing_display }}</span>
+          </div>
+          <div class="detail-item">
+            <span class="detail-label">Size</span>
+            <span class="detail-value">{{ property.size }}</span>
+          </div>
+          <div class="detail-item">
+            <span class="detail-label">Property Type</span>
+            <span class="detail-value">{{ property.get_type_display }}</span>
+          </div>
+          <div class="detail-item">
+            <span class="detail-label">Location</span>
+            <span class="detail-value">{{ property.location }}</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Amenities Section -->
+      {% if property.amenities.all %}
+      <div class="property-card mb-4">
+        <div class="section-header">
+          <h2>Amenities & Features</h2>
+          <div class="section-divider"></div>
+        </div>
+        <div class="amenities-grid">
+          {% for amenity in property.amenities.all %}
+          <div class="amenity-card">
+            <div class="amenity-icon-wrapper">
+              {% if amenity.image %}
+              <img src="{{ amenity.image.url }}" alt="{{ amenity.name }}" class="amenity-icon">
+              {% else %}
+              <i class="fas fa-check-circle amenity-default-icon"></i>
+              {% endif %}
+            </div>
+            <span class="amenity-name">{{ amenity.name }}</span>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+      {% endif %}
+
+    </div>
+
+    <!-- Contact Sidebar -->
+    <div class="col-lg-4">
+      <div class="contact-sidebar">
+        <div class="contact-card">
+          <div class="contact-header">
+            <h3>Interested in this property?</h3>
+            <p>Get in touch with our expert team</p>
+          </div>
+
+          <div class="contact-actions">
+            <a href="tel:+254 721 591111" class="btn btn-primary btn-contact">
+              <i class="fas fa-phone"></i>
+              Call Now
+            </a>
+           <a href="{% url 'contact' %}?property={{ property.name|urlencode }}&location={{ property.location|urlencode }}"
+   class="btn btn-outline-primary btn-contact">
+  <i class="fas fa-envelope"></i>
+  Send Message
+</a>
+            <script>
+  document.querySelectorAll('.enquire-btn').forEach(function(link) {
+    link.addEventListener('click', function(event) {
+      event.preventDefault();
+      window.location.href = this.href + '&t=' + new Date().getTime();
+    });
+  });
+</script>
+
+
+          </div>
+
+          <div class="agent-info">
+            <div class="agent-avatar">
+              <i class="fas fa-user-tie"></i>
+            </div>
+            <div class="agent-details">
+              <h4>Property Consultant</h4>
+              <p>Licensed Real Estate Professional</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+<style>
+/* Global Styles */
+:root {
+  --primary-green: #2d5a27;
+  --light-green: #4a7c59;
+  --accent-green: #6db33f;
+  --soft-green: #f0f8f0;
+  --pure-white: #ffffff;
+  --text-dark: #2c2c2c;
+  --text-gray: #666666;
+  --text-light: #888888;
+  --border-light: #e8f5e8;
+  --shadow-light: rgba(45, 90, 39, 0.1);
+  --shadow-medium: rgba(45, 90, 39, 0.15);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  line-height: 1.6;
+  color: var(--text-dark);
+  padding-top: 0px;
+}
+
+/* Hero Section */
+.property-hero {
+  position: relative;
+  height: 60vh;
+  min-height: 500px;
+  overflow: hidden;
+  margin-top: -80px;
+}
+
+.property-hero-image {
+  height: 60vh;
+  min-height: 500px;
+  object-fit: cover;
+  width: 100%;
+}
+
+.carousel-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(
+    135deg,
+    rgba(45, 90, 39, 0.3) 0%,
+    rgba(45, 90, 39, 0.1) 50%,
+    rgba(0, 0, 0, 0.4) 100%
+  );
+}
+
+.property-hero-content {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: linear-gradient(transparent, rgba(0, 0, 0, 0.7));
+  padding: 60px 0 40px;
+}
+
+.property-hero-title {
+  color: var(--pure-white);
+  font-size: 3rem;
+  font-weight: 700;
+  margin-bottom: 15px;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+.property-hero-location {
+  color: var(--pure-white);
+  font-size: 1.25rem;
+  display: flex;
+  align-items: center;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+}
+
+.property-hero-location i {
+  margin-right: 10px;
+  color: var(--accent-green);
+}
+
+/* Property Cards */
+.property-card {
+  background: var(--pure-white);
+  border-radius: 16px;
+  padding: 30px;
+  box-shadow: 0 4px 20px var(--shadow-light);
+  border: 1px solid var(--border-light);
+  transition: all 0.3s ease;
+}
+
+.property-card:hover {
+  box-shadow: 0 8px 30px var(--shadow-medium);
+  transform: translateY(-2px);
+}
+
+/* Section Headers */
+.section-header {
+  margin-bottom: 25px;
+}
+
+.section-header h2 {
+  color: var(--primary-green);
+  font-size: 1.75rem;
+  font-weight: 600;
+  margin-bottom: 10px;
+}
+
+.section-divider {
+  width: 60px;
+  height: 3px;
+  background: linear-gradient(90deg, var(--accent-green), var(--light-green));
+  border-radius: 2px;
+}
+
+/* Property Highlights */
+.property-highlights-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 20px;
+}
+
+.highlight-card {
+  display: flex;
+  align-items: center;
+  padding: 20px;
+  background: var(--soft-green);
+  border-radius: 12px;
+  border: 1px solid var(--border-light);
+  transition: all 0.3s ease;
+}
+
+.highlight-card:hover {
+  background: var(--pure-white);
+  box-shadow: 0 4px 15px var(--shadow-light);
+}
+
+.price-highlight {
+  background: linear-gradient(135deg, var(--primary-green), var(--light-green));
+  color: var(--pure-white);
+}
+
+.price-highlight .highlight-label,
+.price-highlight .highlight-value {
+  color: var(--pure-white);
+}
+
+.highlight-icon {
+  width: 40px;
+  height: 50px;
+  border-radius: 60%;
+  background: var(--pure-white);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 15px;
+  flex-shrink: 0;
+}
+
+.highlight-icon i {
+  font-size: 20px;
+  color: var(--primary-green);
+}
+
+.price-highlight .highlight-icon {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.price-highlight .highlight-icon i {
+  color: var(--pure-white);
+}
+
+.highlight-content {
+  display: flex;
+  flex-direction: column;
+}
+
+.highlight-label {
+  font-size: 0.875rem;
+  color: var(--text-light);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 5px;
+  font-weight: 500;
+}
+
+.highlight-value {
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: var(--text-dark);
+}
+
+/* Property Description */
+.property-description p {
+  font-size: 1rem;
+  line-height: 1.7;
+  color: var(--text-gray);
+  margin: 0;
+}
+
+/* Property Details */
+.details-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 20px;
+}
+
+.detail-item {
+  display: flex;
+  flex-direction: column;
+  padding: 15px;
+  background: var(--soft-green);
+  border-radius: 10px;
+  border: 1px solid var(--border-light);
+}
+
+.detail-label {
+  font-size: 0.875rem;
+  color: var(--text-light);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 5px;
+  font-weight: 500;
+}
+
+.detail-value {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--text-dark);
+}
+
+/* Amenities */
+.amenities-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 15px;
+}
+
+.amenity-card {
+  display: flex;
+  align-items: center;
+  padding: 15px;
+  background: var(--soft-green);
+  border-radius: 10px;
+  border: 1px solid var(--border-light);
+  transition: all 0.3s ease;
+}
+
+.amenity-card:hover {
+  background: var(--pure-white);
+  box-shadow: 0 2px 10px var(--shadow-light);
+  border-color: var(--accent-green);
+}
+
+.amenity-icon-wrapper {
+  width: 35px;
+  height: 35px;
+  border-radius: 50%;
+  background: var(--pure-white);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 12px;
+  flex-shrink: 0;
+}
+
+.amenity-icon {
+  width: 20px;
+  height: 20px;
+  object-fit: contain;
+}
+
+.amenity-default-icon {
+  color: var(--accent-green);
+  font-size: 16px;
+}
+
+.amenity-name {
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: var(--text-dark);
+}
+
+/* Contact Sidebar */
+.contact-sidebar {
+  position: sticky;
+  top: 100px;
+  z-index: 10;
+}
+
+.contact-card {
+  background: var(--pure-white);
+  border-radius: 16px;
+  padding: 30px;
+  box-shadow: 0 4px 20px var(--shadow-light);
+  border: 1px solid var(--border-light);
+}
+
+.contact-header {
+  text-align: center;
+  margin-bottom: 25px;
+}
+
+.contact-header h3 {
+  color: var(--primary-green);
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+
+.contact-header p {
+  color: var(--text-gray);
+  font-size: 0.95rem;
+  margin: 0;
+}
+
+.contact-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 25px;
+}
+
+.btn-contact {
+  padding: 12px 20px;
+  border-radius: 8px;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  border: none;
+  transition: all 0.3s ease;
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, var(--primary-green), var(--light-green));
+  color: var(--pure-white);
+}
+
+.btn-primary:hover {
+  background: linear-gradient(135deg, var(--light-green), var(--accent-green));
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px var(--shadow-medium);
+}
+
+.btn-outline-primary {
+  background: transparent;
+  color: var(--primary-green);
+  border: 2px solid var(--primary-green);
+}
+
+.btn-outline-primary:hover {
+  background: var(--primary-green);
+  color: var(--pure-white);
+  transform: translateY(-2px);
+}
+
+.agent-info {
+  display: flex;
+  align-items: center;
+  padding-top: 20px;
+  border-top: 1px solid var(--border-light);
+}
+
+.agent-avatar {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background: var(--soft-green);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 15px;
+}
+
+.agent-avatar i {
+  font-size: 20px;
+  color: var(--primary-green);
+}
+
+.agent-details h4 {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--text-dark);
+  margin-bottom: 2px;
+}
+
+.agent-details p {
+  font-size: 0.875rem;
+  color: var(--text-gray);
+  margin: 0;
+}
+
+/* Modal Styles */
+.modal-header {
+  border-bottom: 1px solid var(--border-light);
+}
+
+.modal-title {
+  color: var(--primary-green);
+  font-weight: 600;
+}
+
+.modal-content {
+  border-radius: 16px;
+  overflow: hidden;
+}
+
+/* Carousel Controls */
+.carousel-control-prev,
+.carousel-control-next {
+  width: 50px;
+  height: 50px;
+  background: rgba(45, 90, 39, 0.8);
+  border-radius: 50%;
+  top: 50%;
+  transform: translateY(-50%);
+  opacity: 0.9;
+}
+
+.carousel-control-prev {
+  left: 20px;
+}
+
+.carousel-control-next {
+  right: 20px;
+}
+
+.carousel-control-prev:hover,
+.carousel-control-next:hover {
+  background: var(--primary-green);
+  opacity: 1;
+}
+
+/* Responsive Design */
+@media (max-width: 1200px) {
+  .property-highlights-grid,
+  .details-grid {
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  }
+}
+
+@media (max-width: 768px) {
+  body {
+    padding-top: 70px;
+  }
+
+  .property-hero {
+    height: 50vh;
+    min-height: 400px;
+    margin-top: -70px;
+  }
+
+  .property-hero-image {
+    height: 50vh;
+    min-height: 400px;
+  }
+
+  .property-hero-title {
+    font-size: 2rem;
+  }
+
+  .property-hero-location {
+    font-size: 1rem;
+  }
+
+  .property-card {
+    padding: 20px;
+    margin-bottom: 20px;
+  }
+
+  .property-highlights-grid,
+  .details-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .amenities-grid {
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  }
+
+  .contact-sidebar {
+    position: relative;
+    top: auto !important;
+    margin-top: 30px;
+  }
+
+  .carousel-control-prev,
+  .carousel-control-next {
+    width: 40px;
+    height: 40px;
+  }
+
+  .carousel-control-prev {
+    left: 10px;
+  }
+
+  .carousel-control-next {
+    right: 10px;
+  }
+}
+
+@media (max-width: 576px) {
+  body {
+    padding-top: 60px;
+  }
+
+  .property-hero {
+    margin-top: -60px;
+  }
+
+  .container {
+    padding-left: 15px;
+    padding-right: 15px;
+  }
+
+  .property-hero-content {
+    padding: 40px 0 30px;
+  }
+
+  .property-hero-title {
+    font-size: 1.75rem;
+  }
+
+  .property-highlights-grid,
+  .details-grid,
+  .amenities-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .highlight-card {
+    padding: 15px;
+  }
+}
+</style>
+{% endblock %}

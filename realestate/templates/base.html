@@ -1,0 +1,815 @@
+{% load static %}
+{% load humanize %}
+
+
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>{% block title %}Dove Real Estate{% endblock %}</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@300;400;500;600&family=Source+Sans+3:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<!-- Font Awesome 6.4+ CDN -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+
+<style>
+  /* ===== GLOBAL STYLES ===== */
+  :root {
+    --content-padding: 56px;
+    --content-max-width: 1400px;
+    --navbar-height: 80px;
+    --navbar-scrolled-height: 80px;
+    --primary-color: #07542b;
+    --accent-color: #84c225;
+  }
+
+  html {
+    font-size: 16px;
+    scroll-behavior: smooth;
+  }
+
+  body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    line-height: 1.6;
+    color: #333;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  .page-container {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    width: 100%;
+    max-width: 2560px;
+    margin: 0 auto;
+  }
+
+  main {
+    flex: 1;
+    margin-top: var(--navbar-height); /* Changed from padding-top to margin-top */
+  }
+
+  .responsive-container {
+    width: 100%;
+    max-width: var(--content-max-width);
+    margin: 0 auto;
+    padding: 0 var(--content-padding);
+    box-sizing: border-box;
+  }
+  /* ===== SIMPLIFIED DROPDOWN STYLES ===== */
+  .dropdown {
+    position: relative;
+  }
+
+  .dropdown-toggle::after {
+    content: "▼";
+    display: inline-block;
+    margin-left: 6px;
+    font-size: 0.6em;
+    vertical-align: middle;
+    transition: transform 0.2s ease;
+  }
+
+  .dropdown-menu {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    background: white;
+    min-width: 180px;
+    padding: 8px 0;
+    margin-top: 5px;
+    border-radius: 4px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.2s ease;
+    z-index: 1000;
+  }
+
+  .dropdown:hover .dropdown-menu {
+    opacity: 1;
+    visibility: visible;
+  }
+
+  .dropdown-item {
+    display: block;
+    padding: 8px 20px;
+    color: #333;
+    font-size: 0.9rem;
+    transition: background 0.2s ease;
+  }
+
+  .dropdown-item:hover {
+    background: #f5f5f5;
+  }
+
+/* Update the dropdown menu styles for transparent navbar */
+.navbar:not(.scrolled) .dropdown-menu {
+    background: #fffff; !important; /* Semi-transparent black */
+
+    border: none;
+}
+
+.navbar:not(.scrolled) .dropdown-item {
+    color: white !important;
+}
+
+.navbar:not(.scrolled) .dropdown-item:hover {
+    background: rgba(255, 255, 255, 0.1) !important;
+    color: var(--accent-color) !important;
+}
+
+/* Keep existing styles for scrolled navbar */
+.navbar.scrolled .dropdown-menu {
+    background: var(--primary-color);
+    border: none;
+}
+
+.navbar.scrolled .dropdown-item {
+    color: white;
+    padding: 10px 20px;
+}
+
+.navbar.scrolled .dropdown-item:hover {
+    background: rgba(255,255,255,0.1);
+    color: var(--accent-color);
+}
+
+  /* Mobile Styles */
+@media (max-width: 768px) {
+    .dropdown.active .dropdown-menu {
+        display: block;
+        position: static;
+        background: rgba(255,255,255,0.1);
+        box-shadow: none;
+        margin: 0;
+        padding: 0;
+    }
+
+    .dropdown.active .dropdown-item {
+        padding-left: 40px;
+        color: white !important;
+    }
+
+    .dropdown.active .dropdown-item:hover {
+        background: rgba(255,255,255,0.2) !important;
+    }
+
+    .navbar.light-bg .dropdown.active .dropdown-item {
+        color: #333 !important;
+    }
+
+    .navbar.light-bg .dropdown.active .dropdown-item:hover {
+        color: var(--accent-color) !important;
+    }
+}
+
+  /* ===== NAVBAR ===== */
+  .navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: rgba(0, 0, 0, 0);
+    padding: 0 var(--content-padding);
+    height: var(--navbar-height);
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+    transition: all 0.3s ease;
+    font-family: 'Montserrat', 'Playfair Display', serif;
+  }
+
+  .navbar.scrolled {
+    background: var(--primary-color);
+    box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
+    height: var(--navbar-scrolled-height);
+  }
+  /* Add to your existing CSS */
+.navbar.light-bg .nav-links a {
+    color: #333 !important;
+    text-shadow: none !important;
+}
+
+.navbar.light-bg .nav-links a:hover,
+.navbar.light-bg .nav-links a.active {
+    color: var(--accent-color) !important;
+}
+
+.navbar.light-bg .mobile-menu-toggle span {
+    background-color: #333;
+}
+
+  /* Logo - Dominant Size */
+  .navbar .logo {
+    flex: 0 0 auto;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    margin-right: auto;
+  }
+
+  .navbar .logo img {
+    height: 160px;
+    width: auto;
+    max-height: 180%;
+    transition: all 0.3s ease;
+  }
+
+  /* Navigation Links */
+  .navbar .nav-links {
+    list-style: none;
+    display: flex;
+    margin: 0;
+    padding: 0;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-left: auto;
+  }
+
+  .navbar .nav-links a {
+    color: #ecf0f1;
+    text-decoration: none;
+    padding: 8px 15px;
+    font-family: 'Montserrat', serif;
+    font-weight: 300;
+    font-size: 0.9rem;
+    letter-spacing: 1.2px;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    white-space: nowrap;
+    position: relative;
+  }
+
+  /* Navbar States */
+  .navbar:not(.scrolled) .nav-links a {
+    color: white;
+    text-shadow: 0 0 5px rgba(255,255,255,0.5);
+  }
+
+  .navbar.scrolled .nav-links a:hover {
+    color: var(--accent-color);
+  }
+
+  .navbar.scrolled .nav-links a.active {
+    color: var(--accent-color);
+    font-weight: 500;
+  }
+  /* Update the navbar structure */
+.navbar {
+    width: 100%;
+    background: rgba(0, 0, 0, 0);
+    padding: 0;
+}
+
+.navbar .navbar-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: var(--navbar-height);
+    margin: 0 auto;
+    padding: 0 var(--content-padding);
+    max-width: var(--content-max-width);
+    width: 100%;
+}
+
+
+  /* ===== FOOTER ===== */
+  footer {
+    background: #f9f9f7;
+    padding: 60px var(--content-padding) 30px;
+    box-shadow: inset 0 1px 0 0 #f9f9f7;
+  }
+
+  footer .container {
+    max-width: var(--content-max-width);
+    margin: 0 auto;
+    padding: 0;
+  }
+
+  /* Footer Sections */
+  footer h4 {
+    font-weight: 600;
+    margin-bottom: 20px;
+    color: #2c3e50;
+    font-family: 'Playfair Display', serif;
+  }
+
+  footer p, footer a {
+    color: #495057;
+    font-size: 0.9rem;
+    line-height: 1.7;
+  }
+
+  footer a:hover {
+    text-decoration: underline;
+  }
+
+/* Update the footer to match */
+footer {
+    width: 100%;
+    padding: 60px 0 30px;
+}
+
+footer .footer-container {
+    max-width: var(--content-max-width);
+    margin: 0 auto;
+    padding: 0 var(--content-padding);
+}
+  /* ===== MOBILE RESPONSIVENESS ===== */
+  @media (max-width: 1200px) {
+    :root {
+      --content-padding: 40px;
+    }
+  }
+
+  @media (max-width: 992px) {
+    .navbar .logo img {
+      height: 110px;
+    }
+
+    .navbar .nav-links a {
+      padding: 8px 12px;
+      font-size: 0.85rem;
+    }
+  }
+
+  @media (max-width: 768px) {
+    :root {
+      --content-padding: 30px;
+      --navbar-height: 90px;
+      --navbar-scrolled-height: 80px;
+    }
+
+    .navbar .logo img {
+      height: 100px;
+    }
+
+    /* Mobile Menu Toggle */
+    .mobile-menu-toggle {
+      display: flex;
+      flex-direction: column;
+      cursor: pointer;
+      padding: 5px;
+      z-index: 1001;
+    }
+
+    .mobile-menu-toggle span {
+      width: 25px;
+      height: 3px;
+      background: #ecf0f1;
+      margin: 3px 0;
+      transition: 0.3s;
+      border-radius: 2px;
+    }
+
+    .navbar .nav-links {
+      position: fixed;
+      top: var(--navbar-height);
+      left: 0;
+      right: 0;
+      background: var(--primary-color);
+      flex-direction: column;
+      padding: 20px 0;
+      gap: 0;
+      transform: translateY(-20px);
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.3s ease;
+    }
+
+    .navbar .nav-links.active {
+      transform: translateY(0);
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .navbar .nav-links li {
+      width: 100%;
+      text-align: center;
+    }
+
+    .navbar .nav-links a {
+      padding: 15px 20px;
+    }
+
+    footer {
+      padding: 40px var(--content-padding) 20px;
+    }
+  }
+
+
+  @media (max-width: 576px) {
+    :root {
+      --content-padding: 20px;
+    }
+
+    .navbar .logo img {
+      height: 90px;
+    }
+
+    footer {
+      padding: 30px var(--content-padding) 15px;
+    }
+  }
+
+  /* ===== PRECISE ALIGNMENT GUARANTEES ===== */
+  /* Logo left edge matches "DOVE REAL ESTATE LTD" */
+  .navbar .logo,
+  footer .col-lg-4.col-md-6.mb-4 {
+    padding-left: 0;
+  }
+
+  /* "Let's Connect" right edge matches "RESEARCH" */
+  .navbar .nav-links,
+  footer .col-lg-4.col-md-12 > .row {
+    padding-right: 0;
+  }
+
+  /* Ensure footer columns align with navbar items */
+  footer .row {
+    margin-left: -15px;
+    margin-right: -15px;
+  }
+
+  footer [class^="col-"] {
+    padding-left: 15px;
+    padding-right: 15px;
+  }
+
+
+</style>
+  {% block extra_css %}{% endblock %}
+</head>
+
+<body>
+<div class="page-container">
+  <!-- ======= NAVBAR ======= -->
+  <header>
+    <nav class="navbar">
+      <div class="navbar-container">
+      <div class="logo">
+        <a href="{% url 'homepage' %}">
+          <img id="navbarLogo" src="{% static 'images/logog.png' %}" alt="Dove Logo">
+        <img src="{% static 'images/logow.png' %}" style="display: none;" alt="Preload">
+
+        </a>
+      </div>
+
+      <ul class="nav-links" id="navLinks">
+<!--        <li><a href="{% url 'buy_developments' %}" class="nav-link">Developments</a></li>-->
+<a href="{% url 'search' %}" class="search-icon-link">
+  <i class="fas fa-search"></i>
+  <span class="search-placeholder">Find a home</span>
+</a>
+
+        <li><a href="{% url 'buy_portfolio' %}" class="nav-link">Buy</a></li>
+
+        <li class="nav-item dropdown">
+          <a href="#" class="nav-link dropdown-toggle" id="rentToggle">Rent</a>
+          <ul class="dropdown-menu">
+            <li><a class="dropdown-item" href="{% url 'rent_residential_list' %}">Residential</a></li>
+            <li><a class="dropdown-item" href="{% url 'rent_commercial' %}">Commercial</a></li>
+          </ul>
+        </li>
+        <li><a href="{% url 'sell' %}" class="nav-link">Sell </a></li>
+        <li><a href="{% url 'about' %}" class="nav-link">About</a></li>
+        <li><a href="{% url 'blog:blog_list' %}" class="nav-link">Stories</a></li>
+
+        <li><a href="{% url 'contact' %}" class="nav-link">Let's Connect</a></li>
+      </ul>
+
+
+
+      <div class="mobile-menu-toggle" id="mobileToggle">
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
+      </div>
+    </nav>
+  </header>
+
+  <!-- ======= MAIN CONTENT ======= -->
+  <main>
+    {% block content %}{% endblock %}
+  </main>
+
+<!-- ======= FOOTER ======= -->
+<footer >
+  <div class="footer-container">
+  <div class="container">
+    <div class="row">
+      <!-- Left Column - Contact Info -->
+      <div class="col-lg-4 col-md-6 mb-4">
+        <h4 style="font-weight: 600; margin-bottom: 20px; color: #2c3e50; font-family: 'Playfair Display', serif;">DOVE REAL ESTATE LTD</h4>
+        <p style="color: #495057; line-height: 1.7; font-size: 0.9rem;">
+           Head Office Address:Allamano Center, (Next to Consolota Primary), 5th Floor, Suite 5A Westlands, Nairobi<br>
+
+          NAIROBI, KENYA<br>
+
+            <span style="display: block; margin-top: 10px;"> Branch Address:Mentor Sacco Plaza, 7th Floor, Suite 07, Murang'a Kenya</span>
+
+          <span style="display: block; margin-top: 10px;"> +254 721 591111</span>
+
+          info@dovereatestateltd.com
+        </p>
+      </div>
+
+      <!-- Center Column - Message Button -->
+      <div class="col-lg-4 col-md-6 mb-4 d-flex flex-column align-items-center">
+        <!-- Message Button Centered -->
+        <div style="margin-bottom: 30px; text-align: center;">
+        <a href="https://wa.me/254721591111?text=Hi%20there%2C%20I%20have%20a%20question%20about%20your%20services" target="_blank"
+class="btn btn-outline-dark"
+             style="border-radius: 25px; border-width: 2px; padding: 8px 25px;
+                    transition: all 0.3s ease; display: inline-block;">
+             <i class="fab fa-whatsapp me-2"></i> Send Message
+          </a>
+
+        </div>
+
+<!-- Connect With Us - Smaller and Centered Below Button -->
+<div style="text-align: center; margin-top: auto;">
+  <h5 style="font-weight: 500; margin-bottom: 15px; color: #2c3e50; font-size: 0.9rem;">LET'S CONNECT</h5>
+<div class="social-links" style="display: flex; justify-content: center; gap: 10px;">
+    <a href="https://www.facebook.com/share/1QL9CXL7iP/?mibextid=wwXIfr" target="_blank" style="color: #6c757d; font-size: 0.9rem; width: 32px; height: 32px; display: flex;
+       align-items: center; justify-content: center; border: 1px solid #e0e0e0; border-radius: 50%;
+       transition: all 0.3s ease;">
+      <i class="fab fa-facebook-f"></i>
+    </a>
+    <a href="https://x.com/Doverealestat?t=FlYtxqJMG2gc2cJoEIoafg&s=09" target="_blank" style="color: #6c757d; font-size: 0.9rem; width: 32px; height: 32px; display: flex;
+       align-items: center; justify-content: center; border: 1px solid #e0e0e0; border-radius: 50%;
+       transition: all 0.3s ease;">
+      <img src="{% static 'images/pageimage/twitter.png' %}" alt="X (Twitter)" style="width: 16px; height: 16px;">
+    </a>
+    <a href="https://www.instagram.com/ltddoverealestate?igsh=YzljYTk1ODg3Zg==" target="_blank" style="color: #6c757d; font-size: 0.9rem; width: 32px; height: 32px; display: flex;
+       align-items: center; justify-content: center; border: 1px solid #e0e0e0; border-radius: 50%;
+       transition: all 0.3s ease;">
+      <i class="fab fa-instagram"></i>
+    </a>
+    <a href="https://www.youtube.com/@doverealestateltd25" target="_blank" style="color: #6c757d; font-size: 0.9rem; width: 32px; height: 32px; display: flex;
+       align-items: center; justify-content: center; border: 1px solid #e0e0e0; border-radius: 50%;
+       transition: all 0.3s ease;">
+      <i class="fab fa-youtube"></i>
+    </a>
+    <a href="https://www.tiktok.com/@doverealestateltd?_t=ZM-8wrr6P42181&_r=1" target="_blank" style="color: #6c757d; font-size: 0.9rem; width: 32px; height: 32px; display: flex;
+       align-items: center; justify-content: center; border: 1px solid #e0e0e0; border-radius: 50%;
+       transition: all 0.3s ease;">
+      <i class="fab fa-tiktok"></i>
+    </a>
+</div>
+</div>
+</div>
+
+      <!-- Right Columns - Links -->
+      <div class="col-lg-4 col-md-12">
+        <div class="row">
+          <!-- Company Column -->
+          <div class="col-md-6 mb-4">
+            <h4 style="font-weight: 600; margin-bottom: 20px; color: #2c3e50; font-family: 'Playfair Display', serif;">FIND US</h4>
+            <ul style="list-style: none; padding: 0;">
+              <li style="margin-bottom: 10px;">
+                <a href="{% url 'about' %}" style="color: #495057; text-decoration: none; font-size: 0.9rem; display: block;">About Us</a>
+              </li>
+              <li style="margin-bottom: 10px;">
+                <a href="{% url 'sell' %}" style="color: #495057; text-decoration: none; font-size: 0.9rem; display: block;">Sell with us</a>
+              </li>
+              <li style="margin-bottom: 10px;">
+                <a href="{% url 'blog:blog_list' %}" style="color: #495057; text-decoration: none; font-size: 0.9rem; display: block;">In The News</a>
+              </li>
+              <li style="margin-bottom: 10px;">
+                <a href="{% url 'contact' %}" style="color: #495057; text-decoration: none; font-size: 0.9rem; display: block;">Get In Touch</a>
+              </li>
+
+            </ul>
+          </div>
+
+          <!-- Explore Column -->
+          <div class="col-md-6 mb-4">
+            <h4 style="font-weight: 600; margin-bottom: 20px; color: #2c3e50; font-family: 'Playfair Display', serif;">RESEARCH</h4>
+            <ul style="list-style: none; padding: 0;">
+              <li style="margin-bottom: 10px;">
+                <a href="{% url 'homepage' %}" style="color: #495057; text-decoration: none; font-size: 0.9rem; display: block;">Home</a>
+              </li>
+              <li style="margin-bottom: 10px;">
+                 <a href="{% url 'buy_portfolio' %}" style="color: #495057; text-decoration: none; font-size: 0.9rem; display: block;">Property For Sale</a>
+              </li>
+              <li style="margin-bottom: 10px;">
+                <a href="{% url 'rent_residential_list' %}" style="color: #495057; text-decoration: none; font-size: 0.9rem; display: block;">Property To Let</a>
+              </li>
+              <li style="margin-bottom: 10px;">
+                <a href="{% url 'terian' %}"  style="color: #495057; text-decoration: none; font-size: 0.9rem; display: block;">Developments</a>
+              </li>
+
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Copyright -->
+    <div class="row mt-4 pt-3" style="border-top: 1px solid rgba(0,0,0,0.1);">
+      <div class="col-12 text-center">
+        <p style="color: #6c757d; font-size: 0.8rem;">
+          &copy; {{ now|date:"Y" }} Dove Real Estate Ltd. All rights reserved.
+          <span style="display: block; font-size: 0.7rem; margin-top: 5px;">Registered in Kenya. Company No. ABC123XYZ.</span>
+        </p>
+      </div>
+    </div>
+  </div>
+  </div>
+</footer>
+
+  </div>
+  <!-- JavaScript -->
+  <script type="text/javascript">
+
+  var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
+(function(){
+var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
+s1.async=true;
+s1.src='https://embed.tawk.to/68382c48c149ff190e1665ca/1isdmpvbh';
+s1.charset='UTF-8';
+s1.setAttribute('crossorigin','*');
+s0.parentNode.insertBefore(s1,s0);
+})();
+
+    // Navbar scroll effect
+  window.addEventListener('scroll', function () {
+    const navbar = document.querySelector('.navbar');
+    const logo = document.getElementById('navbarLogo');
+
+    if (window.scrollY > 50) {
+      navbar.classList.add('scrolled');
+      logo.src = "{% static 'images/logow.png' %}";
+    } else {
+      navbar.classList.remove('scrolled');
+      logo.src = "{% static 'images/logog.png' %}";
+    }
+  });
+
+
+  // Mobile menu functionality
+  document.addEventListener('DOMContentLoaded', function() {
+    const mobileToggle = document.getElementById('mobileToggle');
+    const navLinks = document.getElementById('navLinks');
+    const rentToggle = document.getElementById('rentToggle');
+    const dropdownMenu = document.querySelector('.dropdown-menu');
+
+    // Toggle mobile menu
+    mobileToggle.addEventListener('click', function(e) {
+      e.stopPropagation(); // Prevent event from bubbling up
+      this.classList.toggle('active');
+      navLinks.classList.toggle('active');
+
+      // Animate the hamburger icon
+      const spans = this.querySelectorAll('span');
+      if (this.classList.contains('active')) {
+        spans[0].style.transform = 'rotate(45deg) translate(5px, 5px)';
+        spans[1].style.opacity = '0';
+        spans[2].style.transform = 'rotate(-45deg) translate(5px, -5px)';
+      } else {
+        spans[0].style.transform = '';
+        spans[1].style.opacity = '';
+        spans[2].style.transform = '';
+        dropdownMenu.classList.remove('show');
+      }
+    });
+
+    // Toggle dropdown menu
+     if (rentToggle) {
+        rentToggle.addEventListener('click', function(e) {
+            if (window.innerWidth <= 768) { // Only for mobile
+                e.preventDefault();
+                e.stopPropagation(); // Prevent event from bubbling up
+                this.parentElement.classList.toggle('active');
+            }
+        });
+    }
+
+    // Close menu when clicking on a link
+     document.querySelectorAll('.nav-links a:not(.dropdown-toggle)').forEach(link => {
+        link.addEventListener('click', function() {
+            if (window.innerWidth <= 768) {
+                navLinks.classList.remove('active');
+                mobileToggle.classList.remove('active');
+                const spans = mobileToggle.querySelectorAll('span');
+                spans[0].style.transform = '';
+                spans[1].style.opacity = '';
+                spans[2].style.transform = '';
+                document.querySelectorAll('.dropdown').forEach(dropdown => {
+                    dropdown.classList.remove('active');
+                });
+            }
+        });
+    });
+
+    // Close menu when clicking outside
+    document.addEventListener('click', function(e) {
+      if (!e.target.closest('.navbar') && navLinks.classList.contains('active')) {
+        navLinks.classList.remove('active');
+        mobileToggle.classList.remove('active');
+        const spans = mobileToggle.querySelectorAll('span');
+        spans[0].style.transform = '';
+        spans[1].style.opacity = '';
+        spans[2].style.transform = '';
+        dropdownMenu.classList.remove('show');
+      }
+    });
+  });
+
+    // Add active class to current page
+    document.addEventListener('DOMContentLoaded', function() {
+      const currentPath = window.location.pathname;
+      const navLinks = document.querySelectorAll('.nav-link');
+
+      navLinks.forEach(link => {
+        if (link.getAttribute('href') === currentPath) {
+          link.classList.add('active');
+        }
+      });
+    });
+
+    // Dropdown functionality
+    const rentToggle = document.getElementById('rentToggle');
+    const dropdownMenu = rentToggle.nextElementSibling;
+
+    rentToggle.addEventListener('click', function(e) {
+      e.preventDefault();
+      dropdownMenu.classList.toggle('show');
+    });
+
+    // Close dropdown when clicking outside
+    document.addEventListener('click', function(e) {
+      if (!e.target.closest('.dropdown')) {
+        dropdownMenu.classList.remove('show');
+      }
+    });
+
+document.addEventListener("DOMContentLoaded", function () {
+    const navbar = document.querySelector(".navbar");
+    const checkScrollAndBackground = () => {
+        // Check scroll position
+        if (window.scrollY > 50) {
+            navbar.classList.add("scrolled");
+            navbar.classList.remove("light-bg");
+        } else {
+            navbar.classList.remove("scrolled");
+
+            // Check background color
+            const navbarRect = navbar.getBoundingClientRect();
+            const pointBelowNavbar = {
+                x: window.innerWidth / 2,
+                y: navbarRect.bottom + 10
+            };
+
+            const elBelow = document.elementFromPoint(pointBelowNavbar.x, pointBelowNavbar.y);
+            if (elBelow) {
+                const bgColor = window.getComputedStyle(elBelow).backgroundColor;
+                const isLight = (color) => {
+                    if (color === 'rgba(0, 0, 0, 0)') {
+                        // If element is transparent, check its parent
+                        const parentColor = window.getComputedStyle(elBelow.parentElement).backgroundColor;
+                        return isLight(parentColor);
+                    }
+                    const rgb = color.match(/\d+/g)?.map(Number) || [255, 255, 255];
+                    const luminance = (0.299 * rgb[0] + 0.587 * rgb[1] + 0.114 * rgb[2]) / 255;
+                    return luminance > 0.7;
+                };
+
+                if (isLight(bgColor)) {
+                    navbar.classList.add("light-bg");
+                } else {
+                    navbar.classList.remove("light-bg");
+                }
+            }
+        }
+    };
+
+    window.addEventListener("scroll", checkScrollAndBackground);
+    window.addEventListener("resize", checkScrollAndBackground);
+    checkScrollAndBackground(); // Run once on load
+});
+
+  </script>
+
+
+  {% block extra_js %}{% endblock %}
+
+</body>
+</html>
