@@ -468,6 +468,29 @@
 
     <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
     <script>
+document.addEventListener('DOMContentLoaded', function() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const property = urlParams.get('property');
+    const location = urlParams.get('location');
+    const size = urlParams.get('size');
+    const price = urlParams.get('price');
+    const type = urlParams.get('type');
+
+    if (property) {
+        const descriptionField = document.getElementById('description');
+        if (descriptionField) {
+            let message = `I'm interested in the ${type} property: ${property}`;
+            
+            if (location) message += `, located in ${location}`;
+            if (size) message += ` (Size: ${size})`;
+            if (price) message += ` | Price: ${price === 'ON_APPLICATION' ? 'Price on Application' : 'KSH ' + price}`;
+            
+            message += ".\n\nPlease provide more details about availability and pricing.";
+            
+            descriptionField.value = message;
+        }
+    }
+});
 contactForm.addEventListener('submit', async function (e) {
     e.preventDefault();
     console.log("Form submission started");

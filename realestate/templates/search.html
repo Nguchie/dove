@@ -269,8 +269,8 @@
             </div>
 
             <div class="filter-row">
-                <input type="number" name="min_price" placeholder="Min Price (USD)" class="price-input" value="{{ request.GET.min_price }}">
-                <input type="number" name="max_price" placeholder="Max Price (USD)" class="price-input" value="{{ request.GET.max_price }}">
+                <input type="number" name="min_price" placeholder="Min Price (KSH)" class="price-input" value="{{ request.GET.min_price }}">
+                <input type="number" name="max_price" placeholder="Max Price (KSH)" class="price-input" value="{{ request.GET.max_price }}">
                 <button type="submit" name="search" class="search-btn">Search Properties</button>
             </div>
         </div>
@@ -315,13 +315,10 @@
                             {% endif %}
 
                             <div class="property-price">
-                                {% if property.price %}
-                                    ${{ property.price|intcomma }}
-                                    {% if property.status == 'rent' %}/mo{% endif %}
-                                {% else %}
-                                    Price on application
-                                {% endif %}
-                            </div>
+    {{ property.display_price }}
+    {% if property.status == 'rent' and not property.price_on_application %}/mo{% endif %}
+</div>
+
 
                             <div class="property-features">
                                 {% if property.beds %}

@@ -160,6 +160,78 @@
         box-sizing: border-box;
     }
 
+/* Image Gallery Styles */
+.property-image-container {
+    width: 300px;
+    position: relative;
+}
+
+.main-property-image {
+    width: 100%;
+    height: 250px;
+    object-fit: cover;
+    border: 1px solid #e0e0e0;
+    margin-bottom: 10px;
+}
+
+.thumbnail-scroll {
+    display: flex;
+    gap: 5px;
+    overflow-x: auto;
+    padding-bottom: 5px;
+}
+
+.thumbnail-image {
+    width: 60px;
+    height: 45px;
+    object-fit: cover;
+    cursor: pointer;
+    border: 2px solid transparent;
+}
+
+.thumbnail-image:hover, 
+.thumbnail-image.active {
+    border-color: #000;
+}
+
+.gallery-nav {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    padding: 0 10px;
+    box-sizing: border-box;
+    pointer-events: none;
+}
+
+.gallery-nav-btn {
+    background: rgba(0,0,0,0.5);
+    color: white;
+    border: none;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    pointer-events: all;
+}
+
+/* Mobile adjustment */
+@media (max-width: 768px) {
+    .property-image-container {
+        width: 100%;
+    }
+    
+    .main-property-image {
+        height: 300px;
+    }
+}
+
     /* Small devices (landscape phones, 576px and up) */
     @media (min-width: 576px) {
         .property-title {
@@ -224,12 +296,37 @@
     {% for property in commercial %}
     <div class="property-card">
         <!-- LEFT: Property Image -->
-        {% if property.images.first %}
-            <img src="{{ property.images.first.image.url }}" class="property-image" alt="{{ property.name }}">
-        {% else %}
-            <img src="{% static 'images/default-commercial.jpg' %}" class="property-image" alt="Commercial Property">
-        {% endif %}
-
+        <div class="property-image-container">
+    {% if property.images.all %}
+        <!-- Main Image -->
+        <img id="main-image-{{ forloop.counter }}" 
+             src="{{ property.images.first.image.url }}" 
+             class="main-property-image" 
+             alt="{{ property.name }}">
+        
+        <!-- Navigation Buttons -->
+        <div class="gallery-nav">
+            <button class="gallery-nav-btn prev-btn" 
+                    onclick="prevImage({{ forloop.counter }}, {{ property.images.count }})">&#10094;</button>
+            <button class="gallery-nav-btn next-btn" 
+                    onclick="nextImage({{ forloop.counter }}, {{ property.images.count }})">&#10095;</button>
+        </div>
+        
+        <!-- Thumbnail Scroll -->
+        <div class="thumbnail-scroll">
+            {% for image in property.images.all %}
+                <img src="{{ image.image.url }}" 
+                     class="thumbnail-image {% if forloop.first %}active{% endif %}" 
+                     onclick="changeImage({{ forloop.counter }}, {{ forloop.parentloop.counter }})" 
+                     alt="{{ image.caption|default:property.name }}">
+            {% endfor %}
+        </div>
+    {% else %}
+        <img src="{% static 'images/default-commercial.jpg' %}" 
+             class="main-property-image" 
+             alt="Commercial Property">
+    {% endif %}
+</div>
         <!-- RIGHT: Details -->
         <div class="property-info">
             <h2 class="property-title">{{ property.name|upper }}</h2>
@@ -269,6 +366,39 @@
       window.location.href = this.href + '&t=' + new Date().getTime();
     });
   });
+
+     function changeImage(index, propertyIndex) {
+        const propertyCard = document.querySelectorAll('.property-card')[propertyIndex-1];
+        const mainImage = propertyCard.querySelector('.main-property-image');
+        const thumbnails = propertyCard.querySelectorAll('.thumbnail-image');
+        
+        // Update main image
+        mainImage.src = thumbnails[index-1].src;
+        
+        // Update active thumbnail
+        thumbnails.forEach(thumb => thumb.classList.remove('active'));
+        thumbnails[index-1].classList.add('active');
+    }
+    
+    function nextImage(propertyIndex, totalImages) {
+        const propertyCard = document.querySelectorAll('.property-card')[propertyIndex-1];
+        const activeThumb = propertyCard.querySelector('.thumbnail-image.active');
+        const thumbnails = propertyCard.querySelectorAll('.thumbnail-image');
+        const currentIndex = Array.from(thumbnails).indexOf(activeThumb);
+        const nextIndex = (currentIndex + 1) % totalImages;
+        changeImage(nextIndex + 1, propertyIndex);
+    }
+    
+    function prevImage(propertyIndex, totalImages) {
+        const propertyCard = document.querySelectorAll('.property-card')[propertyIndex-1];
+        const activeThumb = propertyCard.querySelector('.thumbnail-image.active');
+        const thumbnails = propertyCard.querySelectorAll('.thumbnail-image');
+        const currentIndex = Array.from(thumbnails).indexOf(activeThumb);
+        const prevIndex = (currentIndex - 1 + totalImages) % totalImages;
+        changeImage(prevIndex + 1, propertyIndex);
+    }
+
+
 </script>
 
 

@@ -1,3 +1,5 @@
+
+
 """
 Django settings for dove project.
 
@@ -22,13 +24,13 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-17^h+2a((yaxb%$r*dv1%mt^#rrz^f4a542#rk8kn)i6)px0y3'
+SECRET_KEY =  config('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-#ALLOWED_HOSTS = ['www.doverealestateltd.com', 'doverealestateltd.com']
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = ['www.doverealestateltd.com', 'doverealestateltd.com']
+#ALLOWED_HOSTS = ['*']
 
 
 
@@ -88,6 +90,11 @@ DATABASES = {
         'PASSWORD': config('DB_PASSWORD'),
         'HOST': config('DB_HOST', default='localhost'),
         'PORT': config('DB_PORT', default='3306'),
+        'OPTIONS': {
+            'charset': 'utf8mb4',
+            'init_command': "SET NAMES 'utf8mb4'",
+        },
+
     }
 }
 
@@ -142,7 +149,7 @@ STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'realestate/static'),  # Add your static files directory
 ]
 
-
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'mail.stackmail.com'

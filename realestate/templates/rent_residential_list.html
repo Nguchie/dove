@@ -147,6 +147,88 @@
         text-align: center;
         box-sizing: border-box;
     }
+/* Image Gallery Styles */
+.property-image-container {
+    width: 300px;
+    position: relative;
+}
+
+.main-property-image {
+    width: 100%;
+    height: 250px;
+    object-fit: cover;
+    border: 1px solid #e0e0e0;
+    margin-bottom: 10px;
+}
+
+.thumbnail-scroll {
+    display: flex;
+    gap: 5px;
+    overflow-x: auto;
+    padding-bottom: 5px;
+    scrollbar-width: thin;
+}
+
+.thumbnail-image {
+    width: 60px;
+    height: 45px;
+    object-fit: cover;
+    cursor: pointer;
+    border: 2px solid transparent;
+    transition: border-color 0.2s;
+}
+
+.thumbnail-image:hover, 
+.thumbnail-image.active {
+    border-color: #000;
+}
+
+.gallery-nav {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    padding: 0 10px;
+    box-sizing: border-box;
+    pointer-events: none;
+}
+
+.gallery-nav-btn {
+    background: rgba(0,0,0,0.5);
+    color: white;
+    border: none;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    pointer-events: all;
+    transition: background 0.2s;
+}
+
+.gallery-nav-btn:hover {
+    background: rgba(0,0,0,0.8);
+}
+
+/* Mobile adjustment */
+@media (max-width: 768px) {
+    .property-image-container {
+        width: 100%;
+    }
+    
+    .main-property-image {
+        height: 300px;
+    }
+    
+    .thumbnail-scroll {
+        padding-bottom: 10px;
+    }
+}
 
     /* Small devices (landscape phones, 576px and up) */
     @media (min-width: 576px) {
@@ -212,12 +294,37 @@
   {% for property in properties %}
   <div class="property-card">
     <!-- Property Image -->
-    {% if property.images.first %}
-    <img src="{{ property.images.first.image.url }}" class="property-image" alt="{{ property.name }}">
+    <div class="property-image-container">
+    {% if property.images.all %}
+        <!-- Main Image -->
+        <img id="main-image-{{ forloop.counter }}" 
+             src="{{ property.images.first.image.url }}" 
+             class="main-property-image" 
+             alt="{{ property.name }}">
+        
+        <!-- Navigation Buttons -->
+        <div class="gallery-nav">
+            <button class="gallery-nav-btn prev-btn" 
+                    onclick="prevImage({{ forloop.counter }}, {{ property.images.count }})">&#10094;</button>
+            <button class="gallery-nav-btn next-btn" 
+                    onclick="nextImage({{ forloop.counter }}, {{ property.images.count }})">&#10095;</button>
+        </div>
+        
+        <!-- Thumbnail Scroll -->
+        <div class="thumbnail-scroll">
+            {% for image in property.images.all %}
+                <img src="{{ image.image.url }}" 
+                     class="thumbnail-image {% if forloop.first %}active{% endif %}" 
+                     onclick="changeImage({{ forloop.counter }}, {{ forloop.parentloop.counter }})" 
+                     alt="{{ image.caption|default:property.name }}">
+            {% endfor %}
+        </div>
     {% else %}
-    <img src="{% static 'images/default-residential.jpg' %}" class="property-image" alt="Property">
+        <img src="{% static 'images/default-residential.jpg' %}" 
+             class="main-property-image" 
+             alt="Residential Property">
     {% endif %}
-
+</div>
     <!-- Property Info -->
     <div class="property-info">
       <h2 class="property-title">{{ property.name|upper }}</h2>
@@ -244,4 +351,47 @@
   <p>No properties found matching your criteria.</p>
   {% endfor %}
 </div>
+<script>
+    function changeImage(index, propertyIndex) {
+        const propertyCards = document.querySelectorAll('.property-card');
+        const currentCard = propertyCards[propertyIndex-1];
+        const mainImage = currentCard.querySelector('.main-property-image');
+        const thumbnails = currentCard.querySelectorAll('.thumbnail-image');
+        
+        if (thumbnails.length > 0) {
+            // Update main image
+            mainImage.src = thumbnails[index-1].src;
+            
+            // Update active thumbnail
+            thumbnails.forEach(thumb => thumb.classList.remove('active'));
+            thumbnails[index-1].classList.add('active');
+        }
+    }
+    
+    function nextImage(propertyIndex, totalImages) {
+        const propertyCards = document.querySelectorAll('.property-card');
+        const currentCard = propertyCards[propertyIndex-1];
+        const activeThumb = currentCard.querySelector('.thumbnail-image.active');
+        const thumbnails = currentCard.querySelectorAll('.thumbnail-image');
+        
+        if (thumbnails.length > 0) {
+            const currentIndex = Array.from(thumbnails).indexOf(activeThumb);
+            const nextIndex = (currentIndex + 1) % totalImages;
+            changeImage(nextIndex + 1, propertyIndex);
+        }
+    }
+    
+    function prevImage(propertyIndex, totalImages) {
+        const propertyCards = document.querySelectorAll('.property-card');
+        const currentCard = propertyCards[propertyIndex-1];
+        const activeThumb = currentCard.querySelector('.thumbnail-image.active');
+        const thumbnails = currentCard.querySelectorAll('.thumbnail-image');
+        
+        if (thumbnails.length > 0) {
+            const currentIndex = Array.from(thumbnails).indexOf(activeThumb);
+            const prevIndex = (currentIndex - 1 + totalImages) % totalImages;
+            changeImage(prevIndex + 1, propertyIndex);
+        }
+    }
+</script>
 {% endblock %}
