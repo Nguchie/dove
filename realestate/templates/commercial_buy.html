@@ -336,16 +336,12 @@
                     <span class="detail-label">SIZE</span>
                     <span class="detail-value">{{ property.size|upper }}</span>
                 </div>
-                <div class="detail-row">
-                    <span class="detail-label">PRICE</span>
-                    <span class="detail-value">
-                        {% if property.price_on_application %}
-                            <span class="on-application">ON APPLICATION</span>
-                        {% else %}
-                            KSH{{ property.price|floatformat:2 }}
-                        {% endif %}
-                    </span>
-                </div>
+               <div class="detail-row">
+    <span class="detail-label">PRICE</span>
+    <span class="detail-value">
+        {{ property.display_price }}
+    </span>
+</div>
                 <div class="detail-row">
                     <span class="detail-label">LOCATION</span>
                     <span class="detail-value">{{ property.location|upper }}</span>
@@ -357,7 +353,7 @@
             {% endif %}
 
 
-<a href="{% url 'contact' %}?description={{ property.name|urlencode }}+-+{{ property.location|urlencode }}" class="enquire-btn">ENQUIRE</a>
+<a href="{% url 'contact' %}?description=Enquiry about {{ property.name|urlencode }} at {{ property.location|urlencode }}" class="enquire-btn">ENQUIRE</a>
 
 <script>
   document.querySelectorAll('.enquire-btn').forEach(function(link) {
