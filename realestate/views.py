@@ -14,6 +14,7 @@ from django.http import JsonResponse
 from django.core.mail import send_mail
 from django.conf import settings
 import json
+from .utils import generate_enquiry_description
 from django.core.mail import EmailMessage
 
 
@@ -250,7 +251,26 @@ def terian_view(request):
 
 def contact_view(request):
     initial_data = {}
-    description = request.GET.get('description')
+    property_id = request.GET.get('property_id')
+
+    if property_id:
+        # Try to get the property from any of our models
+        from .models import (
+            BuyDevelopment, CommercialBuy, BuyLand,
+            ResidentialRent, CommercialRent, ResidentialBuy
+        )
+
+        models = [BuyDevelopment, CommercialBuy, BuyLand, ResidentialRent, CommercialRent, ResidentialBuy]
+        property_obj = None
+
+        for model in models:
+            try:
+                property_obj = model.objects.get(pk=property_id)
+                break
+            except model.DoesNotExist:
+                continue
+
+    description = generate_enquiry_description(request, property_obj)
     if description:
         initial_data['description'] = description
 

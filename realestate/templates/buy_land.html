@@ -352,10 +352,8 @@
             <p class="property-description">{{ land.description }}</p>
             {% endif %}
 
-  <a href="{% url 'contact' %}?property={{ land.name|urlencode }}&location={{ land.location|urlencode }}&size={{ land.size|urlencode }}&price={% if land.price_on_application %}ON_APPLICATION{% else %}{{ land.price|floatformat:0 }}{% endif %}&type=land" 
-   class="enquire-btn">
-    ENQUIRE
-</a>
+  <a href="{% url 'contact' %}?property_id={{ property.id }}" class="enquire-btn">ENQUIRE</a>
+
         </div>
     </div>
     {% empty %}

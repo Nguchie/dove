@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 {% load static %}
-
+{% load property_tags %}
 {% block content %}
 <style>
     .property-container {
@@ -131,7 +131,7 @@
             <a href="{{ development.floorplans.url }}" class="floorplan-link" target="_blank">View Floorplan</a>
             {% endif %}
 
-            <a href="#" class="enquire-btn">ENQUIRE</a>
+            <a href="{% url 'contact' %}?property_id={{ property.id }}" class="enquire-btn">ENQUIRE</a>
         </div>
     </div>
     {% empty %}

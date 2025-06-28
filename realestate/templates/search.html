@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {% load static %}
 {% load humanize %}
-
+{% load property_tags %}
 {% block content %}
 <style>
     /* Search Section */
@@ -223,6 +223,11 @@
         color: var(--text-medium);
         margin-bottom: 20px;
     }
+
+
+.enquire-btn {
+    flex: 1;
+}
 </style>
 
 <!-- Search Form Section -->
@@ -353,9 +358,10 @@
                                 {% endif %}
                             </div>
 
-                            <a href="{{ property.get_absolute_url|default:'#' }}" class="view-details-btn">
-                                View Details
-                            </a>
+                            <!-- Replace the existing view-details-btn with this: -->
+                  <a href="{% url 'contact' %}?property_id={{ property.id }}" class="view-details-btn">
+    Enquire Now
+</a>
                         </div>
                     </div>
                 {% endfor %}
