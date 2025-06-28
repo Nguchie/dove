@@ -33,35 +33,67 @@ def contact_form_submit(request):
             phone = data.get('phone', '').strip()
             inquiry_type = data.get('inquiryType', '').strip()
             description = data.get('description', '').strip()
+            property_id = data.get('property_id', '').strip()
+            property_url = data.get('property_url', '').strip()
 
-            if not all([name, email, description]):
-                raise ValueError("Missing required fields")
+            if not all([name, email]):
+                raise ValueError("Name and email are required fields")
+
+            # Try to get property details if ID is provided
+            property_info = ""
+            if property_id:
+                from .models import (
+                    BuyDevelopment, CommercialBuy, BuyLand,
+                    ResidentialRent, CommercialRent, ResidentialBuy
+                )
+                models = [BuyDevelopment, CommercialBuy, BuyLand,
+                          ResidentialRent, CommercialRent, ResidentialBuy]
+
+                for model in models:
+                    try:
+                        property_obj = model.objects.get(pk=property_id)
+                        property_info = (
+                            f"\n\nProperty Reference: {property_obj.name}\n"
+                            f"Location: {property_obj.location}\n"
+                            f"Type: {model.__name__}\n"
+                            f"Price: {getattr(property_obj, 'price', 'N/A')}\n"
+                        )
+                        if not description:
+                            description = f"I'm interested in {property_obj.name} at {property_obj.location}"
+                        break
+                    except model.DoesNotExist:
+                        continue
+
+            # Include property URL if available but no ID match
+            if property_url and not property_info:
+                property_info = f"\n\nProperty URL: {property_url}"
 
             subject = f"New Inquiry from {name} - {inquiry_type or 'General'}"
             message = f"""
 Name: {name}
 Email: {email}
 Phone: {phone or 'Not provided'}
-Inquiry Type: {inquiry_type or 'Not specified'}
+Inquiry Type: {inquiry_type or 'Not specified'}{property_info}
 
 Message:
-{description}
+{description or 'No message provided'}
             """
 
-            recipient_list = ['info@doverealestateltd.com']  # Ensure this is correct
-            from_email = settings.DEFAULT_FROM_EMAIL  # Use your configured email
+            recipient_list = ['info@doverealestateltd.com']
+            from_email = settings.DEFAULT_FROM_EMAIL
 
-            # Simple send_mail version first for testing
-            send_mail(
+            # Send email with HTML alternative for better formatting
+            email_msg = EmailMessage(
                 subject,
                 message,
                 from_email,
                 recipient_list,
-                fail_silently=False,
+                reply_to=[email],
             )
+            email_msg.send(fail_silently=False)
 
             # Log successful sending
-            print(f"Email sent to {recipient_list}")
+            print(f"Email sent to {recipient_list} from {email}")
 
             return JsonResponse({
                 'status': 'success',
@@ -251,26 +283,7 @@ def terian_view(request):
 
 def contact_view(request):
     initial_data = {}
-    property_id = request.GET.get('property_id')
-
-    if property_id:
-        # Try to get the property from any of our models
-        from .models import (
-            BuyDevelopment, CommercialBuy, BuyLand,
-            ResidentialRent, CommercialRent, ResidentialBuy
-        )
-
-        models = [BuyDevelopment, CommercialBuy, BuyLand, ResidentialRent, CommercialRent, ResidentialBuy]
-        property_obj = None
-
-        for model in models:
-            try:
-                property_obj = model.objects.get(pk=property_id)
-                break
-            except model.DoesNotExist:
-                continue
-
-    description = generate_enquiry_description(request, property_obj)
+    description = request.GET.get('description')
     if description:
         initial_data['description'] = description
 
