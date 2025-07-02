@@ -283,34 +283,29 @@ def terian_view(request):
 
 def contact_view(request):
     initial_data = {}
-    description = request.GET.get('description')
-    if description:
-        initial_data['description'] = description
+
+    # Generate description from property_id if available
+    property_id = request.GET.get('property_id')
+    if property_id:
+        description = generate_enquiry_description(request)
+        if description:
+            initial_data['description'] = description
+
+    # Fallback to direct description if provided
+    elif 'description' in request.GET:
+        initial_data['description'] = request.GET.get('description')
 
     form = ContactForm(initial=initial_data)
 
-    if request.method == 'POST':
-        form = ContactForm(request.POST)
-        if form.is_valid():
-            # Compose email content
-            subject = 'New Property Enquiry'
-            message = (
-                f"Name: {form.cleaned_data['name']}\n"
-                f"Email: {form.cleaned_data['email']}\n"
-                f"Phone: {form.cleaned_data.get('phone')}\n\n"
-                f"Message:\n{form.cleaned_data['description']}"
-            )
-            from_email = form.cleaned_data['email']
-            recipient_list = ['yourcompany@example.com']  # 👈 Replace with your address
+    # Pass property_id to template if available
+    property_id = request.GET.get('property_id')
+    property_url = request.GET.get('property_url', '')
 
-            # Send the email
-            send_mail(subject, message, from_email, recipient_list)
-
-            messages.success(request, "Thank you! Your enquiry has been sent.")
-            return redirect('contact')
-
-    return render(request, 'contact.html', {'form': form})
-
+    return render(request, 'contact.html', {
+        'form': form,
+        'property_id': property_id,
+        'property_url': property_url,
+    })
 
 
 
