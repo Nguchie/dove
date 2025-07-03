@@ -3,7 +3,7 @@
 
 {% block content %}
 <style>
-        .property-container {
+    .property-container {
         font-family: 'Arial', sans-serif;
         max-width: 1000px;
         margin: 0 auto;
@@ -82,7 +82,8 @@
         letter-spacing: 1px;
         border-radius: 0;
     }
-     .property-container {
+
+    .property-container {
         font-family: 'Arial', sans-serif;
         max-width: 1000px;
         margin: 0 auto;
@@ -157,79 +158,162 @@
         width: 100%;
         text-align: center;
         box-sizing: border-box;
-
     }
-/* Image Gallery Styles */
-.property-image-container {
-    width: 300px;
-    position: relative;
-}
 
-.main-property-image {
-    width: 100%;
-    height: 250px;
-    object-fit: cover;
-    border: 1px solid #e0e0e0;
-    margin-bottom: 10px;
-}
-
-.thumbnail-scroll {
-    display: flex;
-    gap: 5px;
-    overflow-x: auto;
-    padding-bottom: 5px;
-}
-
-.thumbnail-image {
-    width: 60px;
-    height: 45px;
-    object-fit: cover;
-    cursor: pointer;
-    border: 2px solid transparent;
-}
-
-.thumbnail-image:hover, 
-.thumbnail-image.active {
-    border-color: #000;
-}
-
-.gallery-nav {
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    width: 100%;
-    display: flex;
-    justify-content: space-between;
-    padding: 0 10px;
-    box-sizing: border-box;
-    pointer-events: none;
-}
-
-.gallery-nav-btn {
-    background: rgba(0,0,0,0.5);
-    color: white;
-    border: none;
-    width: 30px;
-    height: 30px;
-    border-radius: 50%;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 16px;
-    pointer-events: all;
-}
-
-/* Mobile adjustment */
-@media (max-width: 768px) {
+    /* Image Gallery Styles */
     .property-image-container {
-        width: 100%;
+        width: 300px;
+        position: relative;
     }
-    
+
     .main-property-image {
-        height: 300px;
+        width: 100%;
+        height: 250px;
+        object-fit: cover;
+        border: 1px solid #e0e0e0;
+        margin-bottom: 10px;
+        cursor: zoom-in;
     }
-}
+
+    .thumbnail-scroll {
+        display: flex;
+        gap: 5px;
+        overflow-x: auto;
+        padding-bottom: 5px;
+    }
+
+    .thumbnail-image {
+        width: 60px;
+        height: 45px;
+        object-fit: cover;
+        cursor: pointer;
+        border: 2px solid transparent;
+        transition: border-color 0.2s;
+    }
+
+    .thumbnail-image:hover,
+    .thumbnail-image.active {
+        border-color: #000;
+    }
+
+    .gallery-nav {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+        padding: 0 10px;
+        box-sizing: border-box;
+        pointer-events: none;
+    }
+
+    .gallery-nav-btn {
+        background: rgba(0,0,0,0.5);
+        color: white;
+        border: none;
+        width: 30px;
+        height: 30px;
+        border-radius: 50%;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 16px;
+        pointer-events: all;
+        transition: background 0.2s;
+    }
+
+    .gallery-nav-btn:hover {
+        background: rgba(0,0,0,0.8);
+    }
+
+    /* Lightbox Styles */
+    .lightbox {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.9);
+        z-index: 1000;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .lightbox.active {
+        display: flex;
+    }
+
+    .lightbox-content {
+        position: relative;
+        max-width: 90%;
+        max-height: 90%;
+    }
+
+    .lightbox-image {
+        max-width: 100%;
+        max-height: 80vh;
+        display: block;
+        margin: 0 auto;
+    }
+
+    .lightbox-close {
+        position: absolute;
+        top: 15px;
+        right: 15px;
+        color: white;
+        font-size: 30px;
+        font-weight: bold;
+        cursor: pointer;
+    }
+
+    .lightbox-nav {
+        position: absolute;
+        top: 50%;
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+        transform: translateY(-50%);
+        padding: 0 20px;
+        box-sizing: border-box;
+    }
+
+    .lightbox-nav-btn {
+        background: rgba(0,0,0,0.5);
+        color: white;
+        border: none;
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        cursor: pointer;
+        font-size: 20px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .lightbox-nav-btn:hover {
+        background: rgba(0,0,0,0.8);
+    }
+
+    /* Mobile adjustment */
+    @media (max-width: 768px) {
+        .property-image-container {
+            width: 100%;
+        }
+
+        .main-property-image {
+            height: 300px;
+        }
+
+        .lightbox-nav-btn {
+            width: 30px;
+            height: 30px;
+            font-size: 16px;
+        }
+    }
 
     /* Small devices (landscape phones, 576px and up) */
     @media (min-width: 576px) {
@@ -288,7 +372,6 @@
             font-size: 0.85rem;
         }
     }
-
 </style>
 
 <div class="property-container">
@@ -296,36 +379,40 @@
     <div class="property-card">
         <!-- LEFT: Land Image -->
         <div class="property-image-container">
-    {% if land.images.all %}
-        <!-- Main Image -->
-        <img id="main-image-{{ forloop.counter }}" 
-             src="{{ land.images.first.image.url }}" 
-             class="main-property-image" 
-             alt="{{ land.name }}">
-        
-        <!-- Navigation Buttons -->
-        <div class="gallery-nav">
-            <button class="gallery-nav-btn prev-btn" 
-                    onclick="prevImage({{ forloop.counter }}, {{ land.images.count }})">&#10094;</button>
-            <button class="gallery-nav-btn next-btn" 
-                    onclick="nextImage({{ forloop.counter }}, {{ land.images.count }})">&#10095;</button>
+            {% if land.images.all %}
+                <!-- Main Image -->
+                <img id="main-image-{{ forloop.counter }}"
+                     src="{{ land.images.first.image.url }}"
+                     class="main-property-image"
+                     alt="{{ land.name }}"
+                     onclick="openLightbox({{ forloop.counter }}, 0)">
+
+                <!-- Navigation Buttons -->
+                <div class="gallery-nav">
+                    <button class="gallery-nav-btn prev-btn"
+                            onclick="prevImage({{ forloop.counter }}, {{ land.images.count }})">&#10094;</button>
+                    <button class="gallery-nav-btn next-btn"
+                            onclick="nextImage({{ forloop.counter }}, {{ land.images.count }})">&#10095;</button>
+                </div>
+
+                <!-- Thumbnail Scroll -->
+                <div class="thumbnail-scroll">
+                    {% for image in land.images.all %}
+                        <img src="{{ image.image.url }}"
+                             class="thumbnail-image {% if forloop.first %}active{% endif %}"
+                             onclick="changeImage({{ forloop.counter }}, {{ forloop.parentloop.counter }})"
+                             alt="{{ image.caption|default:land.name }}"
+                             data-property-index="{{ forloop.parentloop.counter }}"
+                             data-image-index="{{ forloop.counter0 }}">
+                    {% endfor %}
+                </div>
+            {% else %}
+                <img src="{% static 'images/default-land.jpg' %}"
+                     class="main-property-image"
+                     alt="Land Property">
+            {% endif %}
         </div>
-        
-        <!-- Thumbnail Scroll -->
-        <div class="thumbnail-scroll">
-            {% for image in land.images.all %}
-                <img src="{{ image.image.url }}" 
-                     class="thumbnail-image {% if forloop.first %}active{% endif %}" 
-                     onclick="changeImage({{ forloop.counter }}, {{ forloop.parentloop.counter }})" 
-                     alt="{{ image.caption|default:land.name }}">
-            {% endfor %}
-        </div>
-    {% else %}
-        <img src="{% static 'images/default-land.jpg' %}" 
-             class="main-property-image" 
-             alt="Land Property">
-    {% endif %}
-</div>
+
         <!-- RIGHT: Details -->
         <div class="property-info">
             <h2 class="property-title">{{ land.name|upper }}</h2>
@@ -335,12 +422,11 @@
                     <span class="detail-label">SIZE</span>
                     <span class="detail-value">{{ land.size|upper }}</span>
                 </div>
-                
-<div class="detail-row">
-    <span class="detail-label">PRICE</span>
-    <span class="detail-value">{{ land.display_price }}</span>
-</div>
 
+                <div class="detail-row">
+                    <span class="detail-label">PRICE</span>
+                    <span class="detail-value">{{ land.display_price }}</span>
+                </div>
 
                 <div class="detail-row">
                     <span class="detail-label">LOCATION</span>
@@ -352,76 +438,182 @@
             <p class="property-description">{{ land.description }}</p>
             {% endif %}
 
-  <a href="{% url 'contact' %}?property_id={{ property.id }}" class="enquire-btn">ENQUIRE</a>
-
+            <a href="{% url 'contact' %}?property_id={{ land.id }}&property_type=land&property_url={{ request.build_absolute_uri|urlencode }}"
+               class="enquire-btn">ENQUIRE</a>
         </div>
     </div>
     {% empty %}
     <p>No land properties available.</p>
     {% endfor %}
 </div>
+
+<!-- Lightbox HTML -->
+<div class="lightbox" id="lightbox" onclick="closeLightbox(event)">
+    <span class="lightbox-close" onclick="closeLightbox(event)">&times;</span>
+    <div class="lightbox-content">
+        <img class="lightbox-image" id="lightbox-image" src="" alt="">
+    </div>
+    <div class="lightbox-nav">
+        <button class="lightbox-nav-btn" id="lightbox-prev" onclick="navigateLightbox(-1, event)">&#10094;</button>
+        <button class="lightbox-nav-btn" id="lightbox-next" onclick="navigateLightbox(1, event)">&#10095;</button>
+    </div>
+</div>
+
 <script>
+    // Global variables to track lightbox state
+    let currentPropertyIndex = 0;
+    let currentImageIndex = 0;
+    let totalImages = 0;
+    let imageSources = [];
+
+    // Open lightbox with clicked image
+    function openLightbox(propertyIndex, imageIndex) {
+        const propertyCard = document.querySelectorAll('.property-card')[propertyIndex - 1];
+        const thumbnails = propertyCard.querySelectorAll('.thumbnail-image');
+
+        // Reset array
+        imageSources = [];
+
+        // Populate array with all images for this property
+        thumbnails.forEach(thumb => {
+            imageSources.push(thumb.src);
+        });
+
+        // Set current state
+        currentPropertyIndex = propertyIndex;
+        currentImageIndex = imageIndex;
+        totalImages = thumbnails.length;
+
+        // Update lightbox content
+        document.getElementById('lightbox-image').src = imageSources[imageIndex];
+
+        // Show lightbox
+        document.getElementById('lightbox').classList.add('active');
+
+        // Prevent body scroll
+        document.body.style.overflow = 'hidden';
+    }
+
+    // Close lightbox
+    function closeLightbox(event) {
+        // Only close if clicking on backdrop or close button
+        if (event.target.classList.contains('lightbox') ||
+            event.target.classList.contains('lightbox-close')) {
+            document.getElementById('lightbox').classList.remove('active');
+            document.body.style.overflow = '';
+        }
+        event.stopPropagation();
+    }
+
+    // Navigate between images in lightbox
+    function navigateLightbox(direction, event) {
+        event.stopPropagation();
+        currentImageIndex = (currentImageIndex + direction + totalImages) % totalImages;
+        document.getElementById('lightbox-image').src = imageSources[currentImageIndex];
+    }
+
+    // Handle keyboard events
+    document.addEventListener('keydown', function(event) {
+        const lightbox = document.getElementById('lightbox');
+        if (lightbox.classList.contains('active')) {
+            if (event.key === 'Escape') {
+                closeLightbox(event);
+            } else if (event.key === 'ArrowLeft') {
+                navigateLightbox(-1, event);
+            } else if (event.key === 'ArrowRight') {
+                navigateLightbox(1, event);
+            }
+        }
+    });
+
+    // Gallery navigation functions
+    function changeImage(index, propertyIndex) {
+        const propertyCards = document.querySelectorAll('.property-card');
+        const currentCard = propertyCards[propertyIndex-1];
+        const mainImage = currentCard.querySelector('.main-property-image');
+        const thumbnails = currentCard.querySelectorAll('.thumbnail-image');
+
+        if (thumbnails.length > 0) {
+            // Update main image
+            mainImage.src = thumbnails[index-1].src;
+
+            // Update active thumbnail
+            thumbnails.forEach(thumb => thumb.classList.remove('active'));
+            thumbnails[index-1].classList.add('active');
+        }
+    }
+
+    function nextImage(propertyIndex, totalImages) {
+        const propertyCards = document.querySelectorAll('.property-card');
+        const currentCard = propertyCards[propertyIndex-1];
+        const activeThumb = currentCard.querySelector('.thumbnail-image.active');
+        const thumbnails = currentCard.querySelectorAll('.thumbnail-image');
+
+        if (thumbnails.length > 0) {
+            const currentIndex = Array.from(thumbnails).indexOf(activeThumb);
+            const nextIndex = (currentIndex + 1) % totalImages;
+            changeImage(nextIndex + 1, propertyIndex);
+        }
+    }
+
+    function prevImage(propertyIndex, totalImages) {
+        const propertyCards = document.querySelectorAll('.property-card');
+        const currentCard = propertyCards[propertyIndex-1];
+        const activeThumb = currentCard.querySelector('.thumbnail-image.active');
+        const thumbnails = currentCard.querySelectorAll('.thumbnail-image');
+
+        if (thumbnails.length > 0) {
+            const currentIndex = Array.from(thumbnails).indexOf(activeThumb);
+            const prevIndex = (currentIndex - 1 + totalImages) % totalImages;
+            changeImage(prevIndex + 1, propertyIndex);
+        }
+    }
+
     // Initialize all galleries when page loads
     document.addEventListener('DOMContentLoaded', function() {
         // Find all property containers
         const propertyContainers = document.querySelectorAll('.property-card');
-        
+
         // Initialize each gallery
         propertyContainers.forEach((container, index) => {
             const thumbnails = container.querySelectorAll('.thumbnail-image');
             const mainImage = container.querySelector('.main-property-image');
-            
+
             if (thumbnails.length > 0) {
                 // Set click handlers for thumbnails
                 thumbnails.forEach((thumb, thumbIndex) => {
                     thumb.addEventListener('click', () => {
-                        changeImage(index, thumbIndex);
+                        changeImage(index + 1, thumbIndex + 1);
                     });
                 });
-                
+
                 // Set navigation buttons if they exist
                 const prevBtn = container.querySelector('.prev-btn');
                 const nextBtn = container.querySelector('.next-btn');
-                
+
                 if (prevBtn && nextBtn) {
                     prevBtn.addEventListener('click', () => {
                         const currentIndex = getCurrentThumbIndex(index);
                         const prevIndex = (currentIndex - 1 + thumbnails.length) % thumbnails.length;
-                        changeImage(index, prevIndex);
+                        changeImage(index + 1, prevIndex + 1);
                     });
-                    
+
                     nextBtn.addEventListener('click', () => {
                         const currentIndex = getCurrentThumbIndex(index);
                         const nextIndex = (currentIndex + 1) % thumbnails.length;
-                        changeImage(index, nextIndex);
+                        changeImage(index + 1, nextIndex + 1);
                     });
                 }
             }
         });
     });
 
-    function changeImage(propertyIndex, thumbIndex) {
-        const container = document.querySelectorAll('.property-card')[propertyIndex];
-        const thumbnails = container.querySelectorAll('.thumbnail-image');
-        const mainImage = container.querySelector('.main-property-image');
-        
-        if (thumbnails.length > thumbIndex) {
-            // Update main image
-            mainImage.src = thumbnails[thumbIndex].src;
-            
-            // Update active thumbnail
-            thumbnails.forEach(thumb => thumb.classList.remove('active'));
-            thumbnails[thumbIndex].classList.add('active');
-        }
-    }
-
     function getCurrentThumbIndex(propertyIndex) {
         const container = document.querySelectorAll('.property-card')[propertyIndex];
         const activeThumb = container.querySelector('.thumbnail-image.active');
         const thumbnails = container.querySelectorAll('.thumbnail-image');
-        
+
         return Array.from(thumbnails).indexOf(activeThumb);
     }
 </script>
-
 {% endblock %}

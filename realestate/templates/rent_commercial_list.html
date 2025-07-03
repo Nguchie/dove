@@ -10,7 +10,6 @@
     background-color: #ffffff;
   }
 
-
   .property-card {
     display: flex;
     gap: 30px;
@@ -23,6 +22,7 @@
     height: 220px;
     object-fit: cover;
     border: 1px solid #e0e0e0;
+    cursor: pointer;
   }
 
   .property-info {
@@ -72,119 +72,122 @@
     letter-spacing: 1px;
     border-radius: 0;
   }
-   .property-container {
-        font-family: 'Arial', sans-serif;
-        max-width: 1000px;
-        margin: 0 auto;
-        padding: 15px;
-        background-color: #ffffff;
-        box-sizing: border-box;
-    }
 
-    .property-card {
-        display: flex;
-        flex-direction: column;
-        gap: 20px;
-        margin-bottom: 30px;
-        align-items: flex-start;
-    }
+  .property-container {
+    font-family: 'Arial', sans-serif;
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 15px;
+    background-color: #ffffff;
+    box-sizing: border-box;
+  }
 
-    .property-image {
-        width: 100%;
-        height: auto;
-        max-height: 250px;
-        object-fit: cover;
-        border: 1px solid #e0e0e0;
-    }
+  .property-card {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    margin-bottom: 30px;
+    align-items: flex-start;
+  }
 
-    .property-info {
-        width: 100%;
-    }
+  .property-image {
+    width: 100%;
+    height: auto;
+    max-height: 250px;
+    object-fit: cover;
+    border: 1px solid #e0e0e0;
+  }
 
-    .property-title {
-        font-size: 1.2rem;
-        font-weight: 600;
-        text-transform: uppercase;
-        letter-spacing: 0.3px;
-        margin-bottom: 12px;
-        color: #000;
-    }
+  .property-info {
+    width: 100%;
+  }
 
-    .property-details {
-        margin-bottom: 15px;
-    }
+  .property-title {
+    font-size: 1.2rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+    margin-bottom: 12px;
+    color: #000;
+  }
 
-    .detail-row {
-        display: flex;
-        justify-content: space-between;
-        margin-bottom: 8px;
-        padding-bottom: 8px;
-        border-bottom: 1px solid #f0f0f0;
-    }
+  .property-details {
+    margin-bottom: 15px;
+  }
 
-    .detail-label {
-        font-weight: 600;
-        font-size: 0.9rem;
-        color: #555;
-    }
+  .detail-row {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 8px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid #f0f0f0;
+  }
 
-    .detail-value {
-        font-weight: 500;
-        color: #000;
-        font-size: 0.9rem;
-    }
+  .detail-label {
+    font-weight: 600;
+    font-size: 0.9rem;
+    color: #555;
+  }
 
-    .enquire-btn {
-        display: inline-block;
-        padding: 12px 20px;
-        background-color: #000;
-        color: #fff;
-        text-decoration: none;
-        font-weight: 700;
-        text-transform: uppercase;
-        letter-spacing: 1px;
-        border-radius: 0;
-        width: 100%;
-        text-align: center;
-        box-sizing: border-box;
-    }
-/* Image Gallery Styles */
-.property-image-container {
+  .detail-value {
+    font-weight: 500;
+    color: #000;
+    font-size: 0.9rem;
+  }
+
+  .enquire-btn {
+    display: inline-block;
+    padding: 12px 20px;
+    background-color: #000;
+    color: #fff;
+    text-decoration: none;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    border-radius: 0;
+    width: 100%;
+    text-align: center;
+    box-sizing: border-box;
+  }
+
+  /* Image Gallery Styles */
+  .property-image-container {
     width: 300px;
     position: relative;
-}
+  }
 
-.main-property-image {
+  .main-property-image {
     width: 100%;
     height: 220px;
     object-fit: cover;
     border: 1px solid #e0e0e0;
     margin-bottom: 10px;
-}
+    cursor: zoom-in;
+  }
 
-.thumbnail-scroll {
+  .thumbnail-scroll {
     display: flex;
     gap: 5px;
     overflow-x: auto;
     padding-bottom: 5px;
     scrollbar-width: thin;
-}
+  }
 
-.thumbnail-image {
+  .thumbnail-image {
     width: 60px;
     height: 45px;
     object-fit: cover;
     cursor: pointer;
     border: 2px solid transparent;
     transition: border-color 0.2s;
-}
+  }
 
-.thumbnail-image:hover, 
-.thumbnail-image.active {
+  .thumbnail-image:hover,
+  .thumbnail-image.active {
     border-color: #000;
-}
+  }
 
-.gallery-nav {
+  .gallery-nav {
     position: absolute;
     top: 50%;
     transform: translateY(-50%);
@@ -194,9 +197,9 @@
     padding: 0 10px;
     box-sizing: border-box;
     pointer-events: none;
-}
+  }
 
-.gallery-nav-btn {
+  .gallery-nav-btn {
     background: rgba(0,0,0,0.5);
     color: white;
     border: none;
@@ -210,123 +213,206 @@
     font-size: 16px;
     pointer-events: all;
     transition: background 0.2s;
-}
+  }
 
-.gallery-nav-btn:hover {
+  .gallery-nav-btn:hover {
     background: rgba(0,0,0,0.8);
-}
+  }
 
-/* Mobile adjustment */
-@media (max-width: 768px) {
+  .property-description {
+    line-height: 1.6;
+    margin: 25px 0;
+    font-size: 0.95rem;
+  }
+
+  /* Lightbox Styles */
+  .lightbox {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.9);
+    z-index: 1000;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .lightbox.active {
+    display: flex;
+  }
+
+  .lightbox-content {
+    position: relative;
+    max-width: 90%;
+    max-height: 90%;
+  }
+
+  .lightbox-image {
+    max-width: 100%;
+    max-height: 80vh;
+    display: block;
+    margin: 0 auto;
+  }
+
+  .lightbox-close {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    color: white;
+    font-size: 30px;
+    font-weight: bold;
+    cursor: pointer;
+  }
+
+  .lightbox-nav {
+    position: absolute;
+    top: 50%;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    transform: translateY(-50%);
+    padding: 0 20px;
+    box-sizing: border-box;
+  }
+
+  .lightbox-nav-btn {
+    background: rgba(0,0,0,0.5);
+    color: white;
+    border: none;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .lightbox-nav-btn:hover {
+    background: rgba(0,0,0,0.8);
+  }
+
+  /* Mobile adjustment */
+  @media (max-width: 768px) {
     .property-image-container {
-        width: 100%;
+      width: 100%;
     }
-    
+
     .main-property-image {
-        height: 250px;
+      height: 250px;
     }
-    
+
     .thumbnail-scroll {
-        padding-bottom: 10px;
-    }
-}
-
-
-    /* Small devices (landscape phones, 576px and up) */
-    @media (min-width: 576px) {
-        .property-title {
-            font-size: 1.25rem;
-        }
-        .enquire-btn {
-            width: auto;
-            padding: 12px 25px;
-        }
+      padding-bottom: 10px;
     }
 
-    /* Medium devices (tablets, 768px and up) */
-    @media (min-width: 768px) {
-        .property-container {
-            padding: 30px 20px;
-        }
+    .lightbox-nav-btn {
+      width: 30px;
+      height: 30px;
+      font-size: 16px;
+    }
+  }
 
-        .property-card {
-            flex-direction: row;
-            gap: 30px;
-            margin-bottom: 40px;
-        }
+  /* Small devices (landscape phones, 576px and up) */
+  @media (min-width: 576px) {
+    .property-title {
+      font-size: 1.25rem;
+    }
+    .enquire-btn {
+      width: auto;
+      padding: 12px 25px;
+    }
+  }
 
-        .property-image {
-            width: 300px;
-            height: 250px;
-        }
-
-        .property-title {
-            font-size: 1.3rem;
-            margin-bottom: 15px;
-        }
-
-        .detail-label, .detail-value {
-            font-size: 0.95rem;
-        }
+  /* Medium devices (tablets, 768px and up) */
+  @media (min-width: 768px) {
+    .property-container {
+      padding: 30px 20px;
     }
 
-    /* Large devices (desktops, 992px and up) */
-    @media (min-width: 992px) {
-        .property-container {
-            padding: 40px;
-        }
+    .property-card {
+      flex-direction: row;
+      gap: 30px;
+      margin-bottom: 40px;
     }
 
-    /* Extra small devices (phones less than 576px) */
-    @media (max-width: 575.98px) {
-        .property-container {
-            padding: 10px;
-        }
-        .property-title {
-            font-size: 1.1rem;
-        }
-        .detail-label, .detail-value {
-            font-size: 0.85rem;
-        }
+    .property-image {
+      width: 300px;
+      height: 250px;
     }
 
+    .property-title {
+      font-size: 1.3rem;
+      margin-bottom: 15px;
+    }
+
+    .detail-label, .detail-value {
+      font-size: 0.95rem;
+    }
+  }
+
+  /* Large devices (desktops, 992px and up) */
+  @media (min-width: 992px) {
+    .property-container {
+      padding: 40px;
+    }
+  }
+
+  /* Extra small devices (phones less than 576px) */
+  @media (max-width: 575.98px) {
+    .property-container {
+      padding: 10px;
+    }
+    .property-title {
+      font-size: 1.1rem;
+    }
+    .detail-label, .detail-value {
+      font-size: 0.85rem;
+    }
+  }
 </style>
 
 <div class="property-container">
-
   {% for property in properties %}
   <div class="property-card">
     <div class="property-image-container">
-    {% if property.images.all %}
+      {% if property.images.all %}
         <!-- Main Image -->
-        <img id="main-image-{{ forloop.counter }}" 
-             src="{{ property.images.first.image.url }}" 
-             class="main-property-image" 
-             alt="{{ property.name }}">
-        
+        <img id="main-image-{{ forloop.counter }}"
+             src="{{ property.images.first.image.url }}"
+             class="main-property-image"
+             alt="{{ property.name }}"
+             onclick="openLightbox({{ forloop.counter }}, 0)">
+
         <!-- Navigation Buttons -->
         <div class="gallery-nav">
-            <button class="gallery-nav-btn prev-btn" 
-                    onclick="prevImage({{ forloop.counter }}, {{ property.images.count }})">&#10094;</button>
-            <button class="gallery-nav-btn next-btn" 
-                    onclick="nextImage({{ forloop.counter }}, {{ property.images.count }})">&#10095;</button>
+          <button class="gallery-nav-btn prev-btn"
+                  onclick="prevImage({{ forloop.counter }}, {{ property.images.count }})">&#10094;</button>
+          <button class="gallery-nav-btn next-btn"
+                  onclick="nextImage({{ forloop.counter }}, {{ property.images.count }})">&#10095;</button>
         </div>
-        
+
         <!-- Thumbnail Scroll -->
         <div class="thumbnail-scroll">
-            {% for image in property.images.all %}
-                <img src="{{ image.image.url }}" 
-                     class="thumbnail-image {% if forloop.first %}active{% endif %}" 
-                     onclick="changeImage({{ forloop.counter }}, {{ forloop.parentloop.counter }})" 
-                     alt="{{ image.caption|default:property.name }}">
-            {% endfor %}
+          {% for image in property.images.all %}
+            <img src="{{ image.image.url }}"
+                 class="thumbnail-image {% if forloop.first %}active{% endif %}"
+                 onclick="changeImage({{ forloop.counter }}, {{ forloop.parentloop.counter }})"
+                 alt="{{ image.caption|default:property.name }}"
+                 data-property-index="{{ forloop.parentloop.counter }}"
+                 data-image-index="{{ forloop.counter0 }}">
+          {% endfor %}
         </div>
-    {% else %}
-        <img src="{% static 'images/default-property.jpg' %}" 
-             class="main-property-image" 
+      {% else %}
+        <img src="{% static 'images/default-property.jpg' %}"
+             class="main-property-image"
              alt="Commercial Property">
-    {% endif %}
-</div>
+      {% endif %}
+    </div>
+
     <div class="property-info">
       <h3 class="property-title">{{ property.name|upper }}</h3>
 
@@ -343,57 +429,141 @@
           <span class="detail-label">PRICE</span>
           <span class="detail-value">{{ property.display_price }} </span>
         </div>
+
+        {% if property.description %}
+          <p class="property-description">{{ property.description }}</p>
+        {% endif %}
       </div>
 
-     <a href="{% url 'contact' %}?property={{ property.name|urlencode }}&location={{ property.location|urlencode }}" class="enquire-btn">ENQUIRE</a>
-
+      <a href="{% url 'contact' %}?property_id={{ property.id }}&property_type=rent_commercial&property_url={{ request.build_absolute_uri|urlencode }}"
+         class="enquire-btn">ENQUIRE</a>
     </div>
   </div>
   {% empty %}
   <p>No commercial properties available at this time.</p>
   {% endfor %}
 </div>
+
+<!-- Lightbox HTML -->
+<div class="lightbox" id="lightbox" onclick="closeLightbox(event)">
+  <span class="lightbox-close" onclick="closeLightbox(event)">&times;</span>
+  <div class="lightbox-content">
+    <img class="lightbox-image" id="lightbox-image" src="" alt="">
+  </div>
+  <div class="lightbox-nav">
+    <button class="lightbox-nav-btn" id="lightbox-prev" onclick="navigateLightbox(-1, event)">&#10094;</button>
+    <button class="lightbox-nav-btn" id="lightbox-next" onclick="navigateLightbox(1, event)">&#10095;</button>
+  </div>
+</div>
+
 <script>
-    function changeImage(index, propertyIndex) {
-        const propertyCards = document.querySelectorAll('.property-card');
-        const currentCard = propertyCards[propertyIndex-1];
-        const mainImage = currentCard.querySelector('.main-property-image');
-        const thumbnails = currentCard.querySelectorAll('.thumbnail-image');
-        
-        if (thumbnails.length > 0) {
-            // Update main image
-            mainImage.src = thumbnails[index-1].src;
-            
-            // Update active thumbnail
-            thumbnails.forEach(thumb => thumb.classList.remove('active'));
-            thumbnails[index-1].classList.add('active');
-        }
+  // Global variables to track lightbox state
+  let currentPropertyIndex = 0;
+  let currentImageIndex = 0;
+  let totalImages = 0;
+  let imageSources = [];
+
+  // Open lightbox with clicked image
+  function openLightbox(propertyIndex, imageIndex) {
+    const propertyCard = document.querySelectorAll('.property-card')[propertyIndex - 1];
+    const thumbnails = propertyCard.querySelectorAll('.thumbnail-image');
+
+    // Reset array
+    imageSources = [];
+
+    // Populate array with all images for this property
+    thumbnails.forEach(thumb => {
+      imageSources.push(thumb.src);
+    });
+
+    // Set current state
+    currentPropertyIndex = propertyIndex;
+    currentImageIndex = imageIndex;
+    totalImages = thumbnails.length;
+
+    // Update lightbox content
+    document.getElementById('lightbox-image').src = imageSources[imageIndex];
+
+    // Show lightbox
+    document.getElementById('lightbox').classList.add('active');
+
+    // Prevent body scroll
+    document.body.style.overflow = 'hidden';
+  }
+
+  // Close lightbox
+  function closeLightbox(event) {
+    // Only close if clicking on backdrop or close button
+    if (event.target.classList.contains('lightbox') ||
+        event.target.classList.contains('lightbox-close')) {
+      document.getElementById('lightbox').classList.remove('active');
+      document.body.style.overflow = '';
     }
-    
-    function nextImage(propertyIndex, totalImages) {
-        const propertyCards = document.querySelectorAll('.property-card');
-        const currentCard = propertyCards[propertyIndex-1];
-        const activeThumb = currentCard.querySelector('.thumbnail-image.active');
-        const thumbnails = currentCard.querySelectorAll('.thumbnail-image');
-        
-        if (thumbnails.length > 0) {
-            const currentIndex = Array.from(thumbnails).indexOf(activeThumb);
-            const nextIndex = (currentIndex + 1) % totalImages;
-            changeImage(nextIndex + 1, propertyIndex);
-        }
+    event.stopPropagation();
+  }
+
+  // Navigate between images in lightbox
+  function navigateLightbox(direction, event) {
+    event.stopPropagation();
+    currentImageIndex = (currentImageIndex + direction + totalImages) % totalImages;
+    document.getElementById('lightbox-image').src = imageSources[currentImageIndex];
+  }
+
+  // Handle keyboard events
+  document.addEventListener('keydown', function(event) {
+    const lightbox = document.getElementById('lightbox');
+    if (lightbox.classList.contains('active')) {
+      if (event.key === 'Escape') {
+        closeLightbox(event);
+      } else if (event.key === 'ArrowLeft') {
+        navigateLightbox(-1, event);
+      } else if (event.key === 'ArrowRight') {
+        navigateLightbox(1, event);
+      }
     }
-    
-    function prevImage(propertyIndex, totalImages) {
-        const propertyCards = document.querySelectorAll('.property-card');
-        const currentCard = propertyCards[propertyIndex-1];
-        const activeThumb = currentCard.querySelector('.thumbnail-image.active');
-        const thumbnails = currentCard.querySelectorAll('.thumbnail-image');
-        
-        if (thumbnails.length > 0) {
-            const currentIndex = Array.from(thumbnails).indexOf(activeThumb);
-            const prevIndex = (currentIndex - 1 + totalImages) % totalImages;
-            changeImage(prevIndex + 1, propertyIndex);
-        }
+  });
+
+  // Gallery navigation functions (existing)
+  function changeImage(index, propertyIndex) {
+    const propertyCards = document.querySelectorAll('.property-card');
+    const currentCard = propertyCards[propertyIndex-1];
+    const mainImage = currentCard.querySelector('.main-property-image');
+    const thumbnails = currentCard.querySelectorAll('.thumbnail-image');
+
+    if (thumbnails.length > 0) {
+      // Update main image
+      mainImage.src = thumbnails[index-1].src;
+
+      // Update active thumbnail
+      thumbnails.forEach(thumb => thumb.classList.remove('active'));
+      thumbnails[index-1].classList.add('active');
     }
+  }
+
+  function nextImage(propertyIndex, totalImages) {
+    const propertyCards = document.querySelectorAll('.property-card');
+    const currentCard = propertyCards[propertyIndex-1];
+    const activeThumb = currentCard.querySelector('.thumbnail-image.active');
+    const thumbnails = currentCard.querySelectorAll('.thumbnail-image');
+
+    if (thumbnails.length > 0) {
+      const currentIndex = Array.from(thumbnails).indexOf(activeThumb);
+      const nextIndex = (currentIndex + 1) % totalImages;
+      changeImage(nextIndex + 1, propertyIndex);
+    }
+  }
+
+  function prevImage(propertyIndex, totalImages) {
+    const propertyCards = document.querySelectorAll('.property-card');
+    const currentCard = propertyCards[propertyIndex-1];
+    const activeThumb = currentCard.querySelector('.thumbnail-image.active');
+    const thumbnails = currentCard.querySelectorAll('.thumbnail-image');
+
+    if (thumbnails.length > 0) {
+      const currentIndex = Array.from(thumbnails).indexOf(activeThumb);
+      const prevIndex = (currentIndex - 1 + totalImages) % totalImages;
+      changeImage(prevIndex + 1, propertyIndex);
+    }
+  }
 </script>
 {% endblock %}

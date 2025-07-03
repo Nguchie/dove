@@ -128,10 +128,9 @@
               <i class="fas fa-phone"></i>
               Call Now
             </a>
-                 <a href="{% url 'contact' %}?property={{ property.name|urlencode }}&location={{ property.location|urlencode }}"
+                <a href="{% url 'contact' %}?property_id={{ property.id }}&property_type=rent_residential&property_url={{ request.build_absolute_uri|urlencode }}"
    class="btn btn-outline-primary btn-contact">
-  <i class="fas fa-envelope"></i>
-  Send Message
+  <i class="fas fa-envelope"></i> Enquire
 </a>
             <script>
   document.querySelectorAll('.enquire-btn').forEach(function(link) {

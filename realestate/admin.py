@@ -127,10 +127,11 @@ class BuyLandAdmin(PropertyBaseAdmin):
 
 @admin.register(ResidentialRent)
 class ResidentialRentAdmin(PropertyBaseAdmin):
-    list_filter = ['type']
+    list_display = PropertyBaseAdmin.list_display + ['type', 'beds']  # Use list instead of tuple
+    list_filter = ['type', 'beds']
     fieldsets = PropertyBaseAdmin.fieldsets + (
         ('Rent Info', {
-            'fields': ('type',)
+            'fields': ('type', 'beds')
         }),
     )
 

@@ -16,7 +16,9 @@ from django.conf import settings
 import json
 from .utils import generate_enquiry_description
 from django.core.mail import EmailMessage
-
+from realestate.utils import get_property_by_id
+from django.apps import apps
+from .utils import generate_enquiry_description
 
 @csrf_exempt
 def contact_form_submit(request):
@@ -283,31 +285,43 @@ def terian_view(request):
 
 def contact_view(request):
     initial_data = {}
-
-    # Generate description from property_id if available
+    property_obj = None
     property_id = request.GET.get('property_id')
-    if property_id:
-        description = generate_enquiry_description(request)
-        if description:
-            initial_data['description'] = description
+    property_type = request.GET.get('property_type')  # New
 
-    # Fallback to direct description if provided
-    elif 'description' in request.GET:
-        initial_data['description'] = request.GET.get('description')
+    if property_id:
+        try:
+            # Only search in the specified model if type is provided
+            if property_type:
+                model_map = {
+                    'commercial': CommercialBuy,
+                    'residential': ResidentialBuy,
+                    'land': BuyLand,
+                    'rent_residential': ResidentialRent,  # Changed from 'rent'
+                    'rent_commercial': CommercialRent,    # Changed from 'commercial_rent'
+                    'development': BuyDevelopment
+                }
+                model = model_map.get(property_type)
+                if model:
+                    property_obj = model.objects.get(pk=property_id)
+            else:
+                property_obj = get_property_by_id(property_id)
+
+            if property_obj:
+                description = generate_enquiry_description(request, property_obj)
+                if description:
+                    initial_data['description'] = description
+        except Exception as e:
+            print(f"Error loading property: {e}")
 
     form = ContactForm(initial=initial_data)
-
-    # Pass property_id to template if available
-    property_id = request.GET.get('property_id')
-    property_url = request.GET.get('property_url', '')
 
     return render(request, 'contact.html', {
         'form': form,
         'property_id': property_id,
-        'property_url': property_url,
+        'property_url': request.GET.get('property_url', ''),
+        'property': property_obj
     })
-
-
 
 # views.py
 

@@ -102,7 +102,7 @@ class ResidentialRent(PropertyBase):
         ('furnished', 'Furnished'),
     ]
     type = models.CharField(max_length=50, choices=PROPERTY_TYPES)
-
+    beds = models.IntegerField(null=True, blank=True)
     def get_absolute_url(self):
         from django.urls import reverse
         return reverse('residential_rent_detail', args=[str(self.id)])
